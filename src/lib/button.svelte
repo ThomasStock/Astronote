@@ -1,8 +1,6 @@
 <script lang="ts">
 	export let onClick: () => void;
 
-	export let id: string;
-
 	export let color: 'purple' | 'yellow' | 'red';
 
 	let colorStyles = '';
@@ -20,9 +18,8 @@
 </script>
 
 <button
-	{id}
 	type="button"
 	on:click={onClick}
-	class={`mb-2 mr-2 rounded-lg bg-gradient-to-r px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br focus:outline-none ${colorStyles}`}
+	class={`mb-2 mr-2 grow rounded-lg bg-gradient-to-r px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br focus:outline-none ${colorStyles} `}
 	><slot /></button
 >
