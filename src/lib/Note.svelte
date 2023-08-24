@@ -68,6 +68,6 @@
 	</div>
 </nav>
 <nav class="fixed bottom-1/2 right-2 top-1/2 flex flex-col">
-	<Button color="purple" on:click={handleAdd}>Add</Button>
+	<Button color="purple" on:click={handleAdd}>Add note</Button>
 	<Button color="red" on:click={handleDelete}>{sorted.length > 1 ? 'Delete' : 'Clear'}</Button>
 </nav>
