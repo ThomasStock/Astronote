@@ -1,12 +1,18 @@
 <script lang="ts">
 	import type { HTMLBaseAttributes } from 'svelte/elements';
 
-	type $$Props = HTMLBaseAttributes;
+	export let html: string;
+
+	type $$Props = HTMLBaseAttributes & { html: string };
+
+	function extractContent(html: string) {
+		return new DOMParser().parseFromString(html, 'text/html').documentElement.textContent;
+	}
 </script>
 
-<div
+<span
 	{...$$restProps}
-	class={`w-24 max-w-[1/3vw] text-ellipsis text-left text-xs font-thin ${$$restProps.class}}`}
+	class={`h-96 max-h-[20vh] w-96 max-w-[50vw] overflow-hidden bg-slate-50 text-sm font-light drop-shadow ${$$restProps.class}} m-4 p-2`}
 >
-	<slot />
-</div>
+	{extractContent(html)}
+</span>

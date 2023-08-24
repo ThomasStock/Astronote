@@ -19,10 +19,12 @@
 			colorStyles = 'from-red-500 via-red-600 to-red-700';
 			break;
 	}
+	console.log('restProps', $$restProps);
 </script>
 
 <button
-	{...$$props}
+	{...$$restProps}
+	on:click
 	type="button"
 	class={`mb-2 mr-2 rounded-lg bg-gradient-to-r px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-br focus:outline-none ${colorStyles} ${$$props.class} `}
 	><slot /></button

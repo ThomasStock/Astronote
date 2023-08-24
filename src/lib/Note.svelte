@@ -2,61 +2,72 @@
 	import Button from './Button.svelte';
 	import store from './utils/store';
 	import { KEYS, isNoKey } from './utils/constants';
-	import Preview from './Preview.svelte';
+	import NoteCanvas from './NoteCanvas.svelte';
+
+	interface Note {
+		updatedOn: number;
+		html: string;
+	}
+
+	function getSortedNotes() {
+		return Object.keys(window.localStorage)
+			.filter(isNoKey)
+			.map<{ key: string; value: Note }>((_) => ({
+				key: _,
+				value: JSON.parse(localStorage.getItem(_)!)
+			}))
+			.sort((a, b) => a.value.updatedOn - b.value.updatedOn);
+	}
 
 	let currentId = store<string>(KEYS.currentId, crypto.randomUUID());
 
-	$: note = store($currentId, { updatedOn: Date.now(), html: '' });
+	$: note = store<Note>($currentId, { updatedOn: Date.now(), html: '' });
 
-	$: sorted = Object.keys(window.localStorage)
-		.filter(isNoKey)
-		.map((_) => ({ key: _, value: JSON.parse(localStorage.getItem(_)!) }))
-		.sort((a, b) => a.value.updatedOn - b.value.updatedOn);
+	$: sorted = note && getSortedNotes();
 
 	$: currentIndex = sorted.findIndex((_) => _.key === $currentId);
 
+	$: console.log(previousItem);
+
 	$: isFirstItem = currentIndex === 0;
-	$: goPrevious = isFirstItem ? () => currentId.set(sorted[currentIndex - 1].key) : undefined;
+	$: previousItem = sorted[currentIndex - 1];
+	$: goPrevious = isFirstItem ? undefined : () => currentId.set(previousItem.key);
 
 	$: isLastItem = sorted.length - 1 === currentIndex;
-	$: goNext = () => (isLastItem ? currentId.set(sorted[currentIndex + 1].key) : undefined);
+	$: nextItem = sorted[currentIndex + 1];
+	$: goNext = isLastItem ? undefined : () => currentId.set(nextItem.key);
 
 	$: handleDelete = () => {
 		if (sorted.length > 1) {
 			window.localStorage.removeItem($currentId);
-			const last = sorted.findLast((_) => _.key !== $currentId) ?? { key: '' };
-			currentId.set(last.key);
+			const lastItem = sorted.findLast((_) => _.key !== $currentId) ?? { key: '' };
+			currentId.set(lastItem.key);
 		} else {
 			$note.html = '';
 		}
 	};
 
-	$: handleAdd = () => ($currentId = crypto.randomUUID());
+	$: handleAdd = () => {
+		$currentId = crypto.randomUUID();
+	};
 </script>
 
 <main id="Note" contenteditable class="min-h-screen p-8 outline-none" bind:innerHTML={$note.html} />
-<nav class="fixed bottom-1 right-1 flex flex-col gap-1">
-	<div class="flex flex-auto justify-evenly gap-1">
+<nav class="fixed bottom-1 left-1 right-1 flex flex-col gap-1">
+	<div class="flex justify-between">
 		{#if goPrevious}
-			<Button color="yellow" on:click={goPrevious} class="flex"
-				>{'<<'}
-				<Preview>{sorted[currentIndex]}</Preview></Button
-			>
+			<NoteCanvas on:click={goPrevious} html={previousItem.value.html} />
+		{:else}
+			<div />
 		{/if}
-		<Button color="yellow" on:click={() => {}}
-			><Preview>
-				{$currentId}
-			</Preview></Button
-		>
 		{#if goNext}
-			<Button color="yellow" on:click={goNext} class="flex">
-				<Preview>asdad</Preview>
-				<div>>></div></Button
-			>
+			<NoteCanvas on:click={goNext} html={nextItem.value.html} />
+		{:else}
+			<div />
 		{/if}
 	</div>
-	<div class="flex flex-auto justify-evenly">
-		<Button color="purple" on:click={handleAdd}>Add</Button>
-		<Button color="red" on:click={handleDelete}>{sorted.length > 1 ? 'Delete' : 'Clear'}</Button>
-	</div>
+</nav>
+<nav class="fixed bottom-1/2 right-2 top-1/2 flex flex-col">
+	<Button color="purple" on:click={handleAdd}>Add</Button>
+	<Button color="red" on:click={handleDelete}>{sorted.length > 1 ? 'Delete' : 'Clear'}</Button>
 </nav>
