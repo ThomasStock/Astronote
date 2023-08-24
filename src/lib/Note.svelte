@@ -38,13 +38,13 @@
 	$: goNext = isLastItem ? undefined : () => currentId.set(nextItem.key);
 
 	$: handleDelete = () => {
-		if (sorted.length > 1) {
-			window.localStorage.removeItem($currentId);
-			const lastItem = sorted.findLast((_) => _.key !== $currentId) ?? { key: '' };
-			currentId.set(lastItem.key);
-		} else {
-			$note.html = '';
-		}
+		window.localStorage.removeItem($currentId);
+		const lastItem = sorted.findLast((_) => _.key !== $currentId) ?? { key: '' };
+		currentId.set(lastItem.key);
+	};
+
+	$: handleClear = () => {
+		$note.html = '';
 	};
 
 	$: handleAdd = () => {
@@ -69,5 +69,6 @@
 </nav>
 <nav class="fixed bottom-1/2 right-2 top-1/2 flex flex-col">
 	<Button color="purple" on:click={handleAdd}>Add note</Button>
-	<Button color="red" on:click={handleDelete}>{sorted.length > 1 ? 'Delete' : 'Clear'}</Button>
+	<Button color="red" on:click={handleClear}>Clear</Button>
+	<Button color="red" on:click={handleDelete}>Delete</Button>
 </nav>
