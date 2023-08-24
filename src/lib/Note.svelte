@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Button from './Button.svelte';
 	import store from './utils/store';
 	import { KEYS, isNoKey } from './utils/constants';
 	import NoteCanvas from './NoteCanvas.svelte';
+	import Button from './MyButton.svelte';
 
 	interface Note {
 		updatedOn: number;
