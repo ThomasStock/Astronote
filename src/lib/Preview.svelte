@@ -10,9 +10,10 @@
 	}
 </script>
 
-<span
+<div
 	{...$$restProps}
-	class={`h-96 max-h-[20vh] w-96 max-w-[50vw] overflow-hidden bg-slate-50 text-sm font-light drop-shadow ${$$restProps.class}} m-4 p-2`}
+	on:click
+	class={`w-96 max-w-[50vw] touch-manipulation select-none overflow-hidden text-ellipsis whitespace-nowrap bg-slate-50  text-sm font-medium  shadow drop-shadow hover:cursor-pointer ${$$restProps.class}} m-4 p-4`}
 >
 	{extractContent(html)}
-</span>
+</div>

@@ -3,6 +3,9 @@
 	import { KEYS, isNoKey } from './utils/constants';
 	import NoteCanvas from './NoteCanvas.svelte';
 	import Button from './MyButton.svelte';
+	import { onMount } from 'svelte';
+	import { setSelectionOffset } from './utils/selection';
+	import Preview from './Preview.svelte';
 
 	interface Note {
 		updatedOn: number;
@@ -50,25 +53,40 @@
 	$: handleAdd = () => {
 		$currentId = crypto.randomUUID();
 	};
+
+	let noteElement: HTMLElement;
+	$: noteIsEmpty = Boolean(!$note.html.length);
+	$: {
+		if (noteIsEmpty && noteElement) {
+			noteElement.focus();
+		}
+	}
 </script>
 
-<main id="Note" contenteditable class="min-h-screen p-8 outline-none" bind:innerHTML={$note.html} />
+<main
+	id="Note"
+	contenteditable
+	placeholder="Type or paste here ..."
+	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
+	bind:this={noteElement}
+	bind:innerHTML={$note.html}
+/>
 <nav class="fixed bottom-1 left-1 right-1 flex flex-col gap-1">
 	<div class="flex justify-between">
 		{#if goPrevious}
-			<NoteCanvas on:click={goPrevious} html={previousItem.value.html} />
+			<Preview on:click={goPrevious} html={previousItem.value.html} />
 		{:else}
 			<div />
 		{/if}
 		{#if goNext}
-			<NoteCanvas on:click={goNext} html={nextItem.value.html} />
+			<Preview on:click={goNext} html={nextItem.value.html} />
 		{:else}
 			<div />
 		{/if}
 	</div>
 </nav>
 <nav class="fixed bottom-1/2 right-2 top-1/2 flex flex-col">
-	<Button color="purple" on:click={handleAdd}>Add note</Button>
-	<Button color="red" on:click={handleClear}>Clear</Button>
+	{#if noteIsEmpty}<Button color="red" on:click={handleClear}>Clear</Button>{/if}
+	{#if !noteIsEmpty}<Button color="purple" on:click={handleAdd}>New</Button>{/if}
 	<Button color="red" on:click={handleDelete}>Delete</Button>
 </nav>
