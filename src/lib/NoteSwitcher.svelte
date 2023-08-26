@@ -37,6 +37,7 @@
 						open = false;
 					}}
 					html={note.value.html}
+					id={note.key}
 				/>
 			{/each}
 		</div>
