@@ -1,5 +1,6 @@
 export const KEYS = {
-	currentId: 'currentId'
+	currentId: 'currentId',
+	notes: 'notes'
 };
 
 export const isNoKey = (storageKey: string | undefined) =>

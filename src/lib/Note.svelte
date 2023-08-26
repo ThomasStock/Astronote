@@ -1,65 +1,75 @@
 <script lang="ts">
-	import store from './utils/store';
-	import { KEYS, isNoKey } from './utils/constants';
-	import NoteCanvas from './NoteCanvas.svelte';
+	import { createNote, notes, note, currentId, sortedNotes, currentIndex } from './utils/store';
 	import Button from './MyButton.svelte';
-	import { onMount } from 'svelte';
-	import { setSelectionOffset } from './utils/selection';
 	import Preview from './Preview.svelte';
 
-	interface Note {
-		updatedOn: number;
-		html: string;
+	let innerHTML = '';
+
+	note.subscribe((_) => {
+		const newVal = $note?.html ?? '';
+		if (innerHTML !== newVal) {
+			innerHTML = $note?.html ?? '';
+			console.log('I have set innerHTML to note.html', innerHTML, $note?.html);
+		}
+	});
+
+	$: {
+		const isTypingNewNote = !$note && innerHTML.length;
+		if (isTypingNewNote) {
+			console.log('creating note with', innerHTML);
+			createNote(innerHTML);
+		} else {
+			// should we use !== or != ?
+			const hasChangedNote = $note && innerHTML !== $note.html;
+			if (hasChangedNote) {
+				console.log('updating note to', innerHTML);
+				notes.update((_) => {
+					_[$currentId!].html = innerHTML;
+					return _;
+				});
+			}
+		}
 	}
 
-	function getSortedNotes() {
-		return Object.keys(window.localStorage)
-			.filter(isNoKey)
-			.map<{ key: string; value: Note }>((_) => ({
-				key: _,
-				value: JSON.parse(localStorage.getItem(_)!)
-			}))
-			.sort((a, b) => a.value.updatedOn - b.value.updatedOn);
-	}
+	$: previousItem = $sortedNotes[$currentIndex - 1];
+	$: goPrevious = !previousItem ? undefined : () => currentId.set(previousItem.key);
 
-	let currentId = store<string>(KEYS.currentId, crypto.randomUUID());
-
-	$: note = store<Note>($currentId, { updatedOn: Date.now(), html: '' });
-
-	$: sorted = note && getSortedNotes();
-
-	$: currentIndex = sorted.findIndex((_) => _.key === $currentId);
-
-	$: console.log(previousItem);
-
-	$: isFirstItem = currentIndex === 0;
-	$: previousItem = sorted[currentIndex - 1];
-	$: goPrevious = isFirstItem ? undefined : () => currentId.set(previousItem.key);
-
-	$: isLastItem = sorted.length - 1 === currentIndex;
-	$: nextItem = sorted[currentIndex + 1];
-	$: goNext = isLastItem ? undefined : () => currentId.set(nextItem.key);
+	$: nextItem = $sortedNotes[$currentIndex + 1];
+	$: goNext = !nextItem ? undefined : () => currentId.set(nextItem.key);
 
 	$: handleDelete = () => {
-		window.localStorage.removeItem($currentId);
-		const lastItem = sorted.findLast((_) => _.key !== $currentId) ?? { key: '' };
-		currentId.set(lastItem.key);
-	};
+		const idToDelete = $currentId;
+		if (idToDelete) {
+			// After deleting a note, we show the last-edited note (if any)
+			const lastItem = $sortedNotes.findLast((_) => _.key !== $currentId) ?? { key: undefined };
+			currentId.set(lastItem.key);
 
-	$: handleClear = () => {
-		$note.html = '';
+			notes.update((old) => {
+				const ret = { ...old };
+				delete ret[idToDelete];
+				return ret;
+			});
+		}
 	};
 
 	$: handleAdd = () => {
-		$currentId = crypto.randomUUID();
+		currentId.set(undefined);
 	};
 
+	$: noteIsEmpty = Boolean(!innerHTML.length);
+
 	let noteElement: HTMLElement;
-	$: noteIsEmpty = Boolean(!$note.html.length);
+	$: if (noteIsEmpty && noteElement) {
+		noteElement.focus();
+	}
+
 	$: {
-		if (noteIsEmpty && noteElement) {
-			noteElement.focus();
-		}
+		console.log('#notes', $sortedNotes.length);
+		console.log('#note', $note);
+		console.log('previousItem', previousItem);
+		console.log('nextItem', nextItem);
+		console.log('currentIndex', $currentIndex);
+		console.log('currentId', $currentId);
 	}
 </script>
 
@@ -68,17 +78,16 @@
 	contenteditable
 	placeholder="Type or paste here ..."
 	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
-	bind:this={noteElement}
-	bind:innerHTML={$note.html}
+	bind:innerHTML
 />
 <nav class="fixed bottom-1 left-1 right-1 flex flex-col gap-1">
 	<div class="flex justify-between">
-		{#if goPrevious}
+		{#if previousItem}
 			<Preview on:click={goPrevious} html={previousItem.value.html} />
 		{:else}
 			<div />
 		{/if}
-		{#if goNext}
+		{#if nextItem}
 			<Preview on:click={goNext} html={nextItem.value.html} />
 		{:else}
 			<div />
@@ -86,7 +95,13 @@
 	</div>
 </nav>
 <nav class="fixed bottom-1/2 right-2 top-1/2 flex flex-col">
-	{#if noteIsEmpty}<Button color="red" on:click={handleClear}>Clear</Button>{/if}
 	{#if !noteIsEmpty}<Button color="purple" on:click={handleAdd}>New</Button>{/if}
 	<Button color="red" on:click={handleDelete}>Delete</Button>
+	<Button
+		color="red"
+		on:click={() => {
+			window.localStorage.clear();
+			location.reload();
+		}}>Dev: Clear cache</Button
+	>
 </nav>

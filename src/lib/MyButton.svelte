@@ -19,7 +19,6 @@
 			colorStyles = 'outline-red-300 hover:outline-red-400 text-red-500';
 			break;
 	}
-	console.log('restProps', $$restProps);
 </script>
 
 <button

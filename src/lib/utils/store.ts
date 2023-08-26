@@ -1,30 +1,45 @@
-import type { Writable } from "svelte/store";
-import { writable, get } from "svelte/store";
+import { derived } from 'svelte/store';
+import { KEYS } from './constants';
+import storage from './storage';
 
-const storage = <T>(key: string, initValue: T): Writable<T> => {
-  const store = writable(initValue);
-  if (!localStorage) return store;
+interface Note {
+	updatedOn: number;
+	html: string;
+}
 
-  const storedValueStr = localStorage.getItem(key);
-  if (storedValueStr != null) store.set(JSON.parse(storedValueStr));
-
-  store.subscribe((val) => {
-    if ([null, undefined].includes(val as null | undefined)) {
-      localStorage.removeItem(key);
-    } else {
-      localStorage.setItem(key, JSON.stringify(val));
-    }
-  });
-
-  window.addEventListener("storage", () => {
-    const storedValueStr = localStorage.getItem(key);
-    if (storedValueStr == null) return;
-
-    const localValue: T = JSON.parse(storedValueStr);
-    if (localValue !== get(store)) store.set(localValue);
-  });
-
-  return store;
+export const createNote = (html: string) => {
+	const newId = crypto.randomUUID();
+	currentId.set(newId);
+	notes.update((oldNotes) => {
+		const newNotes = { ...oldNotes, [newId]: { updatedOn: Date.now(), html } };
+		return newNotes;
+	});
 };
 
-export default storage;
+export const currentId = storage<string | undefined>(KEYS.currentId, undefined);
+
+export const notes = storage<Record<string, Note>>(KEYS.notes, {});
+
+export const sortedNotes = derived(notes, ($notes) => {
+	return Object.keys($notes)
+		.map<{ key: string; value: Note }>((_) => ({
+			key: _,
+			value: $notes[_]
+		}))
+		.sort((a, b) => a.value.updatedOn - b.value.updatedOn);
+});
+
+export const currentIndex = derived([sortedNotes, currentId], ([$sortedNotes, $currentId]) => {
+	if (!$currentId) {
+		// Trick the system into thinking we are the 'latest' note.
+		// Probably a bad idea to do this.
+		return $sortedNotes.length;
+	}
+	const foundIndex = $sortedNotes.findIndex((_) => _.key === $currentId);
+
+	return foundIndex;
+});
+
+export const note = derived([currentId, notes], ([$currentId, $notes]) =>
+	$currentId ? $notes[$currentId] : undefined
+);
