@@ -1,4 +1,4 @@
-import { derived } from 'svelte/store';
+import { derived, get } from 'svelte/store';
 import { KEYS } from './constants';
 import storage from './storage';
 
@@ -14,6 +14,20 @@ export const createNote = (html: string) => {
 		const newNotes = { ...oldNotes, [newId]: { updatedOn: Date.now(), html } };
 		return newNotes;
 	});
+};
+
+export const deleteNote = (idToDelete?: string) => {
+	if (idToDelete) {
+		// After deleting a note, we show the last-edited note (if any)
+		const lastItem = get(sortedNotes).findLast((_) => _.key !== idToDelete) ?? { key: undefined };
+		currentId.set(lastItem.key);
+
+		notes.update((old) => {
+			const ret = { ...old };
+			delete ret[idToDelete];
+			return ret;
+		});
+	}
 };
 
 export const currentId = storage<string | undefined>(KEYS.currentId, undefined);

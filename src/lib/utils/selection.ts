@@ -180,7 +180,7 @@ export function getSelectionOffset(container: Node): [number, number] {
 }
 
 export function getInnerText(container: Node) {
-	const buffer = [];
+	const buffer: string[] = [];
 	searchNode(container, container, (node) => {
 		if (node.nodeType === Node.TEXT_NODE) {
 			buffer.push((node as Text).data);
@@ -188,4 +188,16 @@ export function getInnerText(container: Node) {
 		return false;
 	});
 	return buffer.join('');
+}
+
+export function getFirstInnerText(container: Node) {
+	let firstInnerText = '';
+	searchNode(container, container, (node) => {
+		if (node.nodeType === Node.TEXT_NODE) {
+			firstInnerText = (node as Text).data;
+			return true;
+		}
+		return false;
+	});
+	return firstInnerText;
 }

@@ -1,12 +1,15 @@
 <script lang="ts">
 	import type { HTMLBaseAttributes } from 'svelte/elements';
+	import { getFirstInnerText } from './utils/selection';
 
 	export let html: string;
 
 	type $$Props = HTMLBaseAttributes & { html: string };
 
 	function extractContent(html: string) {
-		return new DOMParser().parseFromString(html, 'text/html').documentElement.textContent;
+		const node = new DOMParser().parseFromString(html, 'text/html').documentElement;
+		console.log(node);
+		return getFirstInnerText(node);
 	}
 </script>
 

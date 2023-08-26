@@ -25,6 +25,6 @@
 	{...$$restProps}
 	on:click
 	type="button"
-	class={`mb-2 mr-2 rounded-lg bg-gradient-to-r px-3 py-2.5 text-center text-sm font-medium outline hover:bg-gradient-to-br ${colorStyles} ${$$props.class} `}
+	class={`rounded-lg bg-gradient-to-r px-3 py-2.5 text-center text-sm font-medium outline hover:bg-gradient-to-br ${colorStyles} ${$$props.class} `}
 	><slot /></button
 >

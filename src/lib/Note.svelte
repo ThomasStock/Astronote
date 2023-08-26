@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { createNote, notes, note, currentId, sortedNotes, currentIndex } from './utils/store';
+	import {
+		createNote,
+		notes,
+		note,
+		currentId,
+		sortedNotes,
+		currentIndex,
+		deleteNote
+	} from './utils/store';
 	import Button from './MyButton.svelte';
 	import Preview from './Preview.svelte';
 
@@ -36,21 +44,6 @@
 
 	$: nextItem = $sortedNotes[$currentIndex + 1];
 	$: goNext = !nextItem ? undefined : () => currentId.set(nextItem.key);
-
-	$: handleDelete = () => {
-		const idToDelete = $currentId;
-		if (idToDelete) {
-			// After deleting a note, we show the last-edited note (if any)
-			const lastItem = $sortedNotes.findLast((_) => _.key !== $currentId) ?? { key: undefined };
-			currentId.set(lastItem.key);
-
-			notes.update((old) => {
-				const ret = { ...old };
-				delete ret[idToDelete];
-				return ret;
-			});
-		}
-	};
 
 	$: handleAdd = () => {
 		currentId.set(undefined);
@@ -94,9 +87,9 @@
 		{/if}
 	</div>
 </nav>
-<nav class="fixed bottom-1/2 right-2 top-1/2 flex flex-col">
+<nav class="fixed right-4 top-1/2 flex -translate-y-1/2 flex-col gap-2">
 	{#if !noteIsEmpty}<Button color="purple" on:click={handleAdd}>New</Button>{/if}
-	<Button color="red" on:click={handleDelete}>Delete</Button>
+	<Button color="red" on:click={() => deleteNote($currentId)}>Delete</Button>
 	<Button
 		color="red"
 		on:click={() => {
