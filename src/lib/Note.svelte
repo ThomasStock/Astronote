@@ -9,7 +9,9 @@
 		deleteNote
 	} from './utils/store';
 	import Button from './MyButton.svelte';
-	import Preview from './Preview.svelte';
+	import NoteSwitcher from './NoteSwitcher.svelte';
+	import { SvelteComponent, onMount } from 'svelte';
+	import DevTools from './DevTools.svelte';
 
 	let innerHTML = '';
 
@@ -39,12 +41,6 @@
 		}
 	}
 
-	$: previousItem = $sortedNotes[$currentIndex - 1];
-	$: goPrevious = !previousItem ? undefined : () => currentId.set(previousItem.key);
-
-	$: nextItem = $sortedNotes[$currentIndex + 1];
-	$: goNext = !nextItem ? undefined : () => currentId.set(nextItem.key);
-
 	$: handleAdd = () => {
 		currentId.set(undefined);
 	};
@@ -56,11 +52,12 @@
 		noteElement.focus();
 	}
 
+	// note viewer
+	let open = false;
+
 	$: {
 		console.log('#notes', $sortedNotes.length);
 		console.log('#note', $note);
-		console.log('previousItem', previousItem);
-		console.log('nextItem', nextItem);
 		console.log('currentIndex', $currentIndex);
 		console.log('currentId', $currentId);
 	}
@@ -73,28 +70,12 @@
 	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
 	bind:innerHTML
 />
-<nav class="fixed bottom-1 left-1 right-1 flex flex-col gap-1">
-	<div class="flex justify-between">
-		{#if previousItem}
-			<Preview on:click={goPrevious} html={previousItem.value.html} />
-		{:else}
-			<div />
-		{/if}
-		{#if nextItem}
-			<Preview on:click={goNext} html={nextItem.value.html} />
-		{:else}
-			<div />
-		{/if}
+<nav class="fixed bottom-0 right-6 top-0 flex flex-col justify-center">
+	<div class="flex flex-col gap-2">
+		<NoteSwitcher bind:open />
+		<Button on:click={() => (open = !open)} color="yellow" class="w-32">Notes</Button>
+		{#if !noteIsEmpty}<Button class="w-32" color="purple" on:click={handleAdd}>New</Button>{/if}
+		<Button color="red" class="w-32" on:click={() => deleteNote($currentId)}>Delete</Button>
+		<DevTools />
 	</div>
-</nav>
-<nav class="fixed right-4 top-1/2 flex -translate-y-1/2 flex-col gap-2">
-	{#if !noteIsEmpty}<Button color="purple" on:click={handleAdd}>New</Button>{/if}
-	<Button color="red" on:click={() => deleteNote($currentId)}>Delete</Button>
-	<Button
-		color="red"
-		on:click={() => {
-			window.localStorage.clear();
-			location.reload();
-		}}>Dev: Clear cache</Button
-	>
 </nav>

@@ -25,6 +25,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@tanstack/query-sync-storage-persister": "^4.32.6",
     "@tanstack/react-query-persist-client": "^4.32.6",
     "@tanstack/svelte-query": "^4.32.6",

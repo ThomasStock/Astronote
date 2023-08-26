@@ -17,11 +17,11 @@ export const createNote = (html: string) => {
 };
 
 export const deleteNote = (idToDelete?: string) => {
-	if (idToDelete) {
-		// After deleting a note, we show the last-edited note (if any)
-		const lastItem = get(sortedNotes).findLast((_) => _.key !== idToDelete) ?? { key: undefined };
-		currentId.set(lastItem.key);
+	// After deleting a note, we show the last-edited note (if any)
+	const lastItem = get(sortedNotes).findLast((_) => _.key !== idToDelete) ?? { key: undefined };
+	currentId.set(lastItem.key);
 
+	if (idToDelete) {
 		notes.update((old) => {
 			const ret = { ...old };
 			delete ret[idToDelete];
