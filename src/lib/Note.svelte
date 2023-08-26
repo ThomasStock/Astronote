@@ -12,6 +12,7 @@
 	import NoteSwitcher from './NoteSwitcher.svelte';
 	import { SvelteComponent, onMount } from 'svelte';
 	import DevTools from './DevTools.svelte';
+	import type { MouseEventHandler } from 'svelte/elements';
 
 	let innerHTML = '';
 
@@ -56,10 +57,10 @@
 	let open = false;
 
 	$: {
-		console.log('#notes', $sortedNotes.length);
-		console.log('#note', $note);
-		console.log('currentIndex', $currentIndex);
-		console.log('currentId', $currentId);
+		// console.log('#notes', $sortedNotes.length);
+		// console.log('#note', $note);
+		// console.log('currentIndex', $currentIndex);
+		// console.log('currentId', $currentId);
 	}
 </script>
 
@@ -73,7 +74,14 @@
 <nav class="fixed bottom-0 right-6 top-0 flex flex-col justify-center">
 	<div class="flex flex-col gap-2">
 		<NoteSwitcher bind:open />
-		<Button on:click={() => (open = !open)} color="yellow" class="w-32">Notes</Button>
+		<Button
+			on:click={(e) => {
+				e.stopPropagation();
+				open = !open;
+			}}
+			color="yellow"
+			class="w-32">Notes</Button
+		>
 		{#if !noteIsEmpty}<Button class="w-32" color="purple" on:click={handleAdd}>New</Button>{/if}
 		<Button color="red" class="w-32" on:click={() => deleteNote($currentId)}>Delete</Button>
 		<DevTools />

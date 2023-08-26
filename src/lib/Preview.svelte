@@ -8,7 +8,6 @@
 
 	function extractContent(html: string) {
 		const node = new DOMParser().parseFromString(html, 'text/html').documentElement;
-		console.log(node);
 		return getFirstInnerText(node);
 	}
 </script>
