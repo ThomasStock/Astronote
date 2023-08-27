@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createNote } from './utils/store';
-	import Button from './MyButton.svelte';
+	import Button from './Button.svelte';
 	import { onMount } from 'svelte';
 	import type { Faker } from '@faker-js/faker';
 
