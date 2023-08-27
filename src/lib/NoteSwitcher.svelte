@@ -37,6 +37,7 @@
 				bind:this={containerElement}
 				class="flex h-auto max-h-full flex-col gap-4 overflow-y-auto rounded p-4"
 			>
+				<div>search input and close button here</div>
 				{#each $sortedNotes as note}
 					<Preview
 						class="w-full shrink-0 rounded-lg shadow-md drop-shadow-lg "
