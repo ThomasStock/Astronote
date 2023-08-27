@@ -3,7 +3,6 @@
 	import Button from './MyButton.svelte';
 	import NoteSwitcher from './NoteSwitcher.svelte';
 	import DevTools from './DevTools.svelte';
-	import { onMount } from 'svelte';
 
 	let innerHTML = '';
 
@@ -11,7 +10,6 @@
 		const newVal = $note?.html ?? '';
 		if (innerHTML !== newVal) {
 			innerHTML = $note?.html ?? '';
-			console.log('I have set innerHTML to note.html', innerHTML, $note?.html);
 		}
 	});
 
@@ -44,19 +42,11 @@
 		noteElement.focus();
 	}
 
-	const handleLocationChange: EventListener = (e) => {
-		console.log('location changed!', e);
-	};
-
-	onMount(() => {
-		window.addEventListener('locationchange', handleLocationChange);
-	});
-
 	$: {
 		// console.log('#notes', $sortedNotes.length);
 		// console.log('#note', $note);
 		// console.log('currentIndex', $currentIndex);
-		// console.log('currentId', $currentId);
+		console.log('currentId', $currentId);
 	}
 </script>
 

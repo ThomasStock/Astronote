@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createNote } from './utils/store';
+	import { createNote, generateId } from './utils/store';
 	import Button from './MyButton.svelte';
 	import { onMount } from 'svelte';
 	import type { Faker } from '@faker-js/faker';
@@ -39,6 +39,6 @@
 	color="red"
 	class="w-32 font-mono text-xs"
 	on:click={() => {
-		location.replace();
+		history.pushState(null, '', '/' + generateId() + '?foo=' + Math.random());
 	}}>Dev: url change</Button
 >

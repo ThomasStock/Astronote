@@ -1,14 +1,41 @@
 import { derived, get } from 'svelte/store';
 import { KEYS } from './constants';
 import storage from './storage';
+import urlStorage from './urlStorage';
+import { adjectives, nouns } from './randomWords';
 
 interface Note {
 	updatedOn: number;
 	html: string;
 }
+/**
+ * Create a cool url-friendly id like smokedCat1
+ */
+export const generateId = (base?: string, attempt?: number): string => {
+	const getResult = () => {
+		if (base) {
+			if (attempt) {
+				return base + attempt;
+			} else {
+				return base;
+			}
+		}
+		const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+		const noun = nouns[Math.floor(Math.random() * nouns.length)];
+		return adjective[0].toUpperCase() + adjective.slice(1) + noun[0].toUpperCase() + noun.slice(1);
+	};
+	const result = getResult();
+
+	const alreadyExists = Boolean(get(notes)[result]);
+	if (alreadyExists) {
+		return generateId(result, attempt ? attempt + 1 : 1); // add/increase the number postfix
+	}
+
+	return result;
+};
 
 export const createNote = (html: string) => {
-	const newId = crypto.randomUUID();
+	const newId = getCurrentIdFromUrl() ?? generateId();
 	currentId.set(newId);
 	notes.update((oldNotes) => {
 		const newNotes = { ...oldNotes, [newId]: { updatedOn: Date.now(), html } };
@@ -30,7 +57,15 @@ export const deleteNote = (idToDelete?: string) => {
 	}
 };
 
-export const currentId = storage<string | undefined>(KEYS.currentId, undefined);
+const getCurrentIdFromUrl = () => {
+	const idFromUrl = location.pathname.split('/')[1] ?? null;
+	return idFromUrl;
+};
+const setCurrentIdInUrl = (newId?: string) => {
+	console.log('pushing in history', newId);
+	history.pushState(null, '', newId ? `/${newId}` : '/');
+};
+export const currentId = urlStorage(KEYS.currentId, getCurrentIdFromUrl, setCurrentIdInUrl);
 
 export const notes = storage<Record<string, Note>>(KEYS.notes, {});
 
