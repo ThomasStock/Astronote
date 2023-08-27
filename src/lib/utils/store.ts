@@ -50,7 +50,9 @@ export const createNote = (html: string) => {
 
 export const deleteNote = (idToDelete?: string) => {
 	// After deleting a note, we show the last-edited note (if any)
-	const lastItem = get(sortedNotes).findLast((_) => _.key !== idToDelete) ?? { key: undefined };
+	const lastItem = get(sortedNotes).findLast(
+		(_) => _.key.toLowerCase() !== idToDelete?.toLowerCase()
+	) ?? { key: undefined };
 	currentId.set(lastItem.key);
 
 	if (idToDelete) {
@@ -93,6 +95,9 @@ export const currentIndex = derived([sortedNotes, currentId], ([$sortedNotes, $c
 	return foundIndex;
 });
 
-export const note = derived([currentId, notes], ([$currentId, $notes]) =>
-	$currentId ? $notes[$currentId] : undefined
-);
+export const note = derived([currentId, notes], ([$currentId, $notes]) => {
+	if ($currentId) {
+		const casedKey = Object.keys($notes).find((_) => _.toLowerCase() === $currentId.toLowerCase());
+		return casedKey;
+	}
+});
