@@ -4,7 +4,7 @@
 	import Preview from './Preview.svelte';
 	import { sortedNotes, currentId } from './utils/store';
 
-	let open = true;
+	let open = false;
 
 	let containerElement: HTMLDivElement;
 
