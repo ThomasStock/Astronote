@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { createNote, notes, note, currentId, deleteNote } from './utils/store';
-	import Button from './Button.svelte';
+	import Button from './MyButton.svelte';
 	import NoteSwitcher from './NoteSwitcher.svelte';
 	import DevTools from './DevTools.svelte';
+	import { onMount } from 'svelte';
 
 	let innerHTML = '';
 
@@ -42,6 +43,14 @@
 	$: if (noteIsEmpty && noteElement) {
 		noteElement.focus();
 	}
+
+	const handleLocationChange: EventListener = (e) => {
+		console.log('location changed!', e);
+	};
+
+	onMount(() => {
+		window.addEventListener('locationchange', handleLocationChange);
+	});
 
 	$: {
 		// console.log('#notes', $sortedNotes.length);

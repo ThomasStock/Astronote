@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from './Button.svelte';
+	import Button from './MyButton.svelte';
 	import Preview from './Preview.svelte';
 	import { sortedNotes, currentId } from './utils/store';
 

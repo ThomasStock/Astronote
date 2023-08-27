@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createNote } from './utils/store';
-	import Button from './Button.svelte';
+	import Button from './MyButton.svelte';
 	import { onMount } from 'svelte';
 	import type { Faker } from '@faker-js/faker';
 
@@ -34,4 +34,11 @@
 			}
 		}
 	}}>Dev: insert 10</Button
+>
+<Button
+	color="red"
+	class="w-32 font-mono text-xs"
+	on:click={() => {
+		location.replace();
+	}}>Dev: url change</Button
 >
