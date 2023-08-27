@@ -35,7 +35,12 @@ export const generateId = (base?: string, attempt?: number): string => {
 };
 
 export const createNote = (html: string) => {
-	const newId = getCurrentIdFromUrl() ?? generateId();
+	let newId = generateId();
+	const current = get(currentId);
+	if (current && !get(note)) {
+		newId = current;
+	}
+
 	currentId.set(newId);
 	notes.update((oldNotes) => {
 		const newNotes = { ...oldNotes, [newId]: { updatedOn: Date.now(), html } };
@@ -62,7 +67,6 @@ const getCurrentIdFromUrl = () => {
 	return idFromUrl;
 };
 const setCurrentIdInUrl = (newId?: string) => {
-	console.log('pushing in history', newId);
 	history.pushState(null, '', newId ? `/${newId}` : '/');
 };
 export const currentId = urlStorage(KEYS.currentId, getCurrentIdFromUrl, setCurrentIdInUrl);

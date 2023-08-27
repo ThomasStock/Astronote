@@ -48,7 +48,6 @@ const urlStorage = (
 	window.addEventListener('locationchange', () => {
 		const newLocationValue = getUrlValue();
 		if (newLocationValue !== get(store)) {
-			console.log('setting store val to newlocationvalue', newLocationValue);
 			store.set(newLocationValue);
 		}
 	});

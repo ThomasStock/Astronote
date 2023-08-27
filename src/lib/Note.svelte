@@ -16,13 +16,11 @@
 	$: {
 		const isTypingNewNote = !$note && innerHTML.length;
 		if (isTypingNewNote) {
-			console.log('creating note with', innerHTML);
 			createNote(innerHTML);
 		} else {
 			// should we use !== or != ?
 			const hasChangedNote = $note && innerHTML !== $note.html;
 			if (hasChangedNote) {
-				console.log('updating note to', innerHTML);
 				notes.update((_) => {
 					_[$currentId!].html = innerHTML;
 					return _;
