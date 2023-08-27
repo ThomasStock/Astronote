@@ -30,10 +30,6 @@
 			e.stopPropagation();
 			deleteNote(id);
 		}}
-		><img
-			src="/public/delete_FILL0_wght400_GRAD0_opsz48.svg"
-			alt="delete"
-			class="h-6 text-slate-500"
-		/></a
+		><img src="/delete_FILL0_wght400_GRAD0_opsz48.svg" alt="delete" class="h-6 text-slate-500" /></a
 	>
 </div>
