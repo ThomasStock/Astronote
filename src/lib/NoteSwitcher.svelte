@@ -1,11 +1,9 @@
 <script lang="ts">
+	import Button from './Button.svelte';
 	import Preview from './Preview.svelte';
 	import { sortedNotes, currentId } from './utils/store';
 
-	export let open = false;
-	export const toggle = () => {
-		open = !open;
-	};
+	let open = false;
 
 	let containerElement: HTMLDivElement;
 
@@ -43,3 +41,11 @@
 		</div>
 	</div>
 {/if}
+<Button
+	on:click={(e) => {
+		e.stopPropagation();
+		open = !open;
+	}}
+	color="yellow"
+	class="w-32">Notes</Button
+>
