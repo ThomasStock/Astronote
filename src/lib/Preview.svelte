@@ -2,6 +2,7 @@
 	import type { HTMLBaseAttributes } from 'svelte/elements';
 	import { getFirstInnerText } from './utils/selection';
 	import { deleteNote } from './utils/store';
+	import Icon from './icons/Icon.svelte';
 
 	export let html: string;
 	export let id: string;
@@ -17,10 +18,15 @@
 <div
 	{...$$restProps}
 	on:click
-	class={` flex w-96 max-w-[50vw] select-none items-center justify-between  bg-slate-50  shadow drop-shadow hover:cursor-pointer ${$$restProps.class}}`}
+	class={`group flex w-96 max-w-[50vw] items-center justify-between bg-slate-50  shadow  drop-shadow transition-shadow hover:cursor-pointer hover:shadow-xl ${$$restProps.class}}`}
 >
-	<div class=" overflow-x-clip text-ellipsis whitespace-nowrap p-4 text-sm font-medium">
-		{extractContent(html) ?? ''}
+	<div class="flex flex-col gap-4 overflow-x-clip p-6">
+		<span
+			class="block select-none overflow-x-clip text-ellipsis whitespace-nowrap text-sm font-medium"
+			>{extractContent(html) ?? ''}</span
+		>
+
+		<!-- <span class="self-start text-xs text-slate-400 hover:text-slate-600">/{id}</span> -->
 	</div>
 	<a
 		class="shrink-0"
@@ -30,6 +36,9 @@
 			e.stopPropagation();
 			deleteNote(id);
 		}}
-		><img src="/delete_FILL0_wght400_GRAD0_opsz48.svg" alt="delete" class="h-6 text-slate-500" /></a
+		><Icon
+			class="opacity-inactive group-hover:opacity-unfocused group-hover:hover:opacity-focused focus:opacity-focused mr-2 text-2xl"
+			name="delete"
+		/></a
 	>
 </div>

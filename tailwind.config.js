@@ -3,8 +3,10 @@ export default {
 	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx,svelte}'],
 	theme: {
 		extend: {
-			fontSize: {
-				clamp: 'clamp(1rem, 5vw, 3rem)'
+			opacity: {
+				inactive: '38%',
+				unfocused: '54%',
+				focused: '87%'
 			}
 		}
 	},

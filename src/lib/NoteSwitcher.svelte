@@ -3,7 +3,7 @@
 	import Preview from './Preview.svelte';
 	import { sortedNotes, currentId } from './utils/store';
 
-	let open = false;
+	let open = true;
 
 	let containerElement: HTMLDivElement;
 
@@ -25,7 +25,7 @@
 	<div class="absolute bottom-4 right-32 top-4 mr-2 flex flex-col justify-center">
 		<div
 			bind:this={containerElement}
-			class="flex h-auto max-h-full flex-col gap-2 overflow-y-auto rounded p-2"
+			class="flex h-auto max-h-full flex-col gap-4 overflow-y-auto rounded p-2"
 		>
 			{#each $sortedNotes as note}
 				<Preview
