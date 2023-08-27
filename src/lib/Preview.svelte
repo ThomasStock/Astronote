@@ -18,7 +18,7 @@
 <div
 	{...$$restProps}
 	on:click
-	class={`group flex w-96 max-w-[50vw] items-center justify-between bg-slate-50  shadow  drop-shadow transition-shadow hover:cursor-pointer hover:shadow-xl ${$$restProps.class}}`}
+	class={`group flex items-center justify-between bg-slate-50  shadow  drop-shadow transition-shadow hover:cursor-pointer hover:shadow-xl ${$$restProps.class}}`}
 >
 	<div class="flex flex-col gap-4 overflow-x-clip p-6">
 		<span
@@ -29,7 +29,7 @@
 		<!-- <span class="self-start text-xs text-slate-400 hover:text-slate-600">/{id}</span> -->
 	</div>
 	<a
-		class="shrink-0"
+		class=""
 		href="#"
 		on:click={(e) => {
 			e.preventDefault();

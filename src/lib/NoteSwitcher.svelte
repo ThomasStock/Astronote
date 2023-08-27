@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onDestroy } from 'svelte';
 	import Button from './MyButton.svelte';
 	import Preview from './Preview.svelte';
 	import { sortedNotes, currentId } from './utils/store';
@@ -14,30 +15,40 @@
 		}
 	};
 
-	$: if (open) {
+	$: if (open && containerElement) {
 		window.addEventListener('click', outsideClickHandeler);
 	} else {
 		window.removeEventListener('click', outsideClickHandeler);
 	}
+
+	onDestroy(() => {
+		window.removeEventListener('click', outsideClickHandeler);
+	});
 </script>
 
 {#if open}
-	<div class="absolute bottom-4 right-32 top-4 mr-2 flex flex-col justify-center">
+	<div
+		class="fixed bottom-0 left-0 right-0 top-0 flex flex-col items-center justify-center backdrop-blur-sm"
+	>
 		<div
-			bind:this={containerElement}
-			class="flex h-auto max-h-full flex-col gap-4 overflow-y-auto rounded p-2"
+			class="absolute inset-12 rounded-xl bg-slate-200 p-4 outline outline-1 outline-slate-300 md:relative md:h-4/6 md:max-w-2xl"
 		>
-			{#each $sortedNotes as note}
-				<Preview
-					class="shrink-0 rounded-lg shadow-md drop-shadow-lg"
-					on:click={() => {
-						currentId.set(note.key);
-						open = false;
-					}}
-					html={note.value.html}
-					id={note.key}
-				/>
-			{/each}
+			<div
+				bind:this={containerElement}
+				class="flex h-auto max-h-full flex-col gap-4 overflow-y-auto rounded p-4"
+			>
+				{#each $sortedNotes as note}
+					<Preview
+						class="w-full shrink-0 rounded-lg shadow-md drop-shadow-lg "
+						on:click={() => {
+							currentId.set(note.key);
+							open = false;
+						}}
+						html={note.value.html}
+						id={note.key}
+					/>
+				{/each}
+			</div>
 		</div>
 	</div>
 {/if}
