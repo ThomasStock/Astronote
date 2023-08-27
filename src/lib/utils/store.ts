@@ -98,6 +98,6 @@ export const currentIndex = derived([sortedNotes, currentId], ([$sortedNotes, $c
 export const note = derived([currentId, notes], ([$currentId, $notes]) => {
 	if ($currentId) {
 		const casedKey = Object.keys($notes).find((_) => _.toLowerCase() === $currentId.toLowerCase());
-		return casedKey;
+		return casedKey ? $notes[casedKey] : undefined;
 	}
 });
