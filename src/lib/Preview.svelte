@@ -18,7 +18,7 @@
 <div
 	{...$$restProps}
 	on:click
-	class={`group flex items-center justify-between bg-slate-50  shadow  drop-shadow transition-shadow hover:cursor-pointer hover:shadow-xl ${$$restProps.class}}`}
+	class={`flex items-center justify-between bg-slate-50  shadow  drop-shadow transition-shadow hover:cursor-pointer hover:shadow-xl ${$$restProps.class}}`}
 >
 	<div class="flex flex-col gap-4 overflow-x-clip p-6">
 		<span
@@ -35,10 +35,6 @@
 			e.preventDefault();
 			e.stopPropagation();
 			deleteNote(id);
-		}}
-		><Icon
-			class="opacity-inactive group-hover:opacity-unfocused group-hover:hover:opacity-focused focus:opacity-focused mr-2 text-2xl"
-			name="delete"
-		/></a
+		}}><Icon class="mr-2 fill-slate-300 text-2xl focus:fill-slate-700" name="delete" /></a
 	>
 </div>
