@@ -140,8 +140,8 @@ export function getSelectionOffset(container: Node): [number, number] {
 	let end = 0;
 
 	const selection = window.getSelection();
-	for (let i = 0, len = selection?.rangeCount; i < len; i++) {
-		const range = selection?.getRangeAt(i);
+	for (let i = 0, len = selection?.rangeCount as number; i < len; i++) {
+		const range = selection?.getRangeAt(i) as Range;
 		if (range.intersectsNode(container)) {
 			const startNode = range.startContainer;
 			searchNode(container, container, (node) => {
