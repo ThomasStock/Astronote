@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
-	import Button from './MyButton.svelte';
 	import Preview from './Preview.svelte';
-	import { sortedNotes, currentId } from './utils/store';
+	import { sortedNotes, currentId, view } from './utils/store';
+	import LinkButton from './LinkButton.svelte';
 
-	let open = false;
+	$: open = $view === 'search';
 
 	let containerElement: HTMLDivElement;
 
 	const outsideClickHandeler: EventListener = (e) => {
 		const clickedOutside = !containerElement.contains(e.target as Node);
 		if (clickedOutside) {
-			open = false;
+			view.set(undefined);
 		}
 	};
 
@@ -43,7 +43,6 @@
 						class="w-full shrink-0 rounded-lg shadow-md drop-shadow-lg "
 						on:click={() => {
 							currentId.set(note.key);
-							open = false;
 						}}
 						html={note.value.html}
 						id={note.key}
@@ -53,11 +52,4 @@
 		</div>
 	</div>
 {/if}
-<Button
-	on:click={(e) => {
-		e.stopPropagation();
-		open = !open;
-	}}
-	color="yellow"
-	class="w-32">Notes</Button
->
+<LinkButton view="search" class="bg-sky-300 hover:bg-sky-400">search</LinkButton>

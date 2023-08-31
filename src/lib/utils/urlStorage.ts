@@ -25,12 +25,12 @@ import { writable, get } from 'svelte/store';
 	});
 })();
 
-const urlStorage = (
+const urlStorage = <T extends string = string>(
 	key: string,
-	getUrlValue: () => string | undefined,
-	setUrlValue: (newVal?: string) => void
-): Writable<string | undefined> => {
-	const store = writable<string | undefined>(getUrlValue());
+	getUrlValue: () => T | undefined,
+	setUrlValue: (newVal?: T) => void
+): Writable<T | undefined> => {
+	const store = writable<T | undefined>(getUrlValue());
 	if (!location) return store;
 
 	store.subscribe((val) => {

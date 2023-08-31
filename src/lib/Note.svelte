@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { createNote, notes, note, currentId, deleteNote } from './utils/store';
-	import Button from './MyButton.svelte';
+	import { createNote, notes, note, currentId, deleteNote, view } from './utils/store';
 	import NoteSwitcher from './NoteSwitcher.svelte';
 	import DevTools from './DevTools.svelte';
+	import LinkButton from './LinkButton.svelte';
 
 	let innerHTML = '';
 
@@ -29,7 +29,7 @@
 		}
 	}
 
-	$: handleAdd = () => {
+	$: handleAdd = (e: Event) => {
 		currentId.set(undefined);
 	};
 
@@ -44,7 +44,8 @@
 		// console.log('#notes', $sortedNotes.length);
 		// console.log('#note', $note);
 		// console.log('currentIndex', $currentIndex);
-		console.log('currentId', $currentId);
+		// console.log('currentId', $currentId);
+		// console.log('view', $view);
 	}
 </script>
 
@@ -55,12 +56,26 @@
 	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
 	bind:innerHTML
 />
-<nav class="fixed bottom-0 right-6 top-0 flex flex-col justify-center">
-	<div class="flex flex-col gap-2">
+
+<nav class="fixed bottom-0 right-0 top-0 flex flex-col justify-center">
+	<div class="flex flex-col items-end gap-6 p-4">
 		<NoteSwitcher />
 
-		{#if !noteIsEmpty}<Button class="w-32" color="purple" on:click={handleAdd}>New</Button>{/if}
-		<Button color="red" class="w-32" on:click={() => deleteNote($currentId)}>Delete</Button>
+		{#if !noteIsEmpty}
+			<LinkButton href={'/'} onClick={handleAdd} class="bg-emerald-300 hover:bg-emerald-400"
+				>add</LinkButton
+			>
+		{/if}
+		<LinkButton onClick={() => deleteNote($currentId)} class="bg-red-300 hover:bg-red-400"
+			>delete</LinkButton
+		>
+	</div>
+</nav>
+
+<nav class="fixed bottom-0 right-0 flex flex-col justify-center">
+	<div class="flex flex-col items-end gap-2 p-4">
 		<DevTools />
 	</div>
 </nav>
+
+<!-- <a class="fixed bottom-0 left-0 right-0 block bg-slate-50 p-4 text-xl" href="#search">Search...</a> -->

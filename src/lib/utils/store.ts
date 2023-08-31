@@ -68,10 +68,30 @@ const getCurrentIdFromUrl = () => {
 	const idFromUrl = location.pathname.split('/')[1] ?? null;
 	return idFromUrl;
 };
+const getPathForId = (id?: string) => (id ? `/${id}` : '/');
 const setCurrentIdInUrl = (newId?: string) => {
-	history.pushState(null, '', newId ? `/${newId}` : '/');
+	history.pushState(null, '', getPathForId(newId));
 };
 export const currentId = urlStorage(KEYS.currentId, getCurrentIdFromUrl, setCurrentIdInUrl);
+
+const views = ['search'];
+export type View = 'search';
+const getCurrenViewFromUrl = () => {
+	const viewFromUrl = location.hash.split('#')[1] ?? null;
+	if (views.indexOf(viewFromUrl) !== -1) {
+		return viewFromUrl as View;
+	}
+};
+
+export const getUrlForView = derived(currentId, ($currentId) => {
+	return (view: View | undefined) => {
+		return view ? `#${view}` : getPathForId($currentId);
+	};
+});
+const setCurrentViewInUrl = (newView?: View) => {
+	history.pushState(null, '', get(getUrlForView)(newView));
+};
+export const view = urlStorage<View>(KEYS.view, getCurrenViewFromUrl, setCurrentViewInUrl);
 
 export const notes = storage<Record<string, Note>>(KEYS.notes, {});
 

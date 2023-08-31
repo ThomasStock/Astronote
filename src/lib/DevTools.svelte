@@ -20,7 +20,7 @@
 	on:click={() => {
 		window.localStorage.clear();
 		location.reload();
-	}}>Dev: Clear cache</Button
+	}}>Clear cache</Button
 >
 <Button
 	color="red"
@@ -33,12 +33,12 @@
 				createNote(faker?.lorem.paragraphs({ min: 1, max: 3 }, '<br/><br/>'));
 			}
 		}
-	}}>Dev: insert 10</Button
+	}}>insert 10</Button
 >
 <Button
 	color="red"
 	class="w-32 font-mono text-xs"
 	on:click={() => {
 		history.pushState(null, '', '/' + generateId() + '?foo=' + Math.random());
-	}}>Dev: url change</Button
+	}}>url change</Button
 >
