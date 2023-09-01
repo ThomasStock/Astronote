@@ -15,7 +15,7 @@ jobs:
           node-version: 18
       - name: Install dependencies
         working-directory: ./playwright
-        run: pnpm install --frozen-lockfile
+        run: npm ci
       - name: Install Playwright Browsers
         working-directory: ./playwright
         run: npx playwright install --with-deps
