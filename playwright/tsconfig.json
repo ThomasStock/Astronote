@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".", // This must be specified if "paths" is.
+		"paths": {},
+		"allowJs": true,
+		"skipLibCheck": true
+	},
+	"include": ["tests/*.ts", "playwright.config.ts"]
+}
