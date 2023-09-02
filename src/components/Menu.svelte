@@ -14,8 +14,9 @@
 		const undersize = menu.offsetTop + menu.clientHeight;
 		if (undersize > $viewport) {
 			deltaY = undersize - $viewport;
+			console.log('for calc', deltaY, menu.offsetTop);
 			deltaY = Math.max(0, Math.min(deltaY, menu.offsetTop));
-		} else {
+			console.log(undersize, $viewport, deltaY);
 		}
 	}
 
@@ -28,7 +29,7 @@
 <nav aria-label="menu" class="fixed bottom-0 right-0 top-0 flex flex-col justify-center">
 	<div
 		bind:this={menu}
-		style={`transform: translateY(${deltaY}px);`}
+		style={`transform: translateY(${-deltaY}px);`}
 		class="flex flex-col items-end gap-6 p-4"
 	>
 		<NoteSwitcher />

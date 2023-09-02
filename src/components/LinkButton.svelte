@@ -18,6 +18,6 @@
 			e.preventDefault();
 		}
 	}}
-	class={`mr-2 flex h-12 w-12 items-center justify-center rounded-full text-white shadow ${$$props.class}`}
+	class={`mr-2 flex h-16 w-16 items-center justify-center rounded-full text-white shadow ${$$props.class}`}
 	><span class="material-symbols-rounded text-4xl">{icon}</span></a
 >
