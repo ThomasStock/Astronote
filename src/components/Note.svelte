@@ -1,12 +1,11 @@
 <script lang="ts">
-	import NoteSwitcher from './NoteSwitcher.svelte';
 	import DevTools from './DevTools/DevTools.svelte';
-	import LinkButton from './LinkButton.svelte';
 	import { createNote } from 'store/createNote';
 	import { currentId } from 'store/currentId';
-	import { deleteNote } from 'store/deleteNote';
 	import { note } from 'store/note';
 	import { notes } from 'store/notes';
+	import WindowData from './DevTools/WindowData.svelte';
+	import Menu from './Menu.svelte';
 
 	let innerHTML = '';
 
@@ -33,10 +32,6 @@
 		}
 	}
 
-	$: handleAdd = (e: Event) => {
-		currentId.set(undefined);
-	};
-
 	$: noteIsEmpty = Boolean(!innerHTML.length);
 
 	let noteElement: HTMLElement;
@@ -61,25 +56,7 @@
 	bind:innerHTML
 />
 
-<nav aria-label="menu" class="fixed bottom-0 right-0 top-0 flex flex-col justify-center">
-	<div class="flex flex-col items-end gap-6 p-4">
-		<NoteSwitcher />
-
-		{#if !noteIsEmpty}
-			<LinkButton
-				icon="add"
-				href={'/'}
-				onClick={handleAdd}
-				class="bg-emerald-300 hover:bg-emerald-400"
-			></LinkButton>
-		{/if}
-		<LinkButton
-			icon="delete"
-			onClick={() => deleteNote($currentId)}
-			class="bg-red-300 hover:bg-red-400"
-		></LinkButton>
-	</div>
-</nav>
+<Menu {noteIsEmpty} />
 
 <nav aria-label="dev menu" class="fixed bottom-0 right-0 flex flex-col justify-center">
 	<div class="flex flex-col items-end gap-2 p-4">
