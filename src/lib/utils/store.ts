@@ -1,7 +1,7 @@
 import { derived, get } from 'svelte/store';
 import { KEYS } from './constants';
 import storage from './storage';
-import urlStorage from './urlStorage';
+import urlStorage, { getHistoryState } from './urlStorage';
 import { adjectives, nouns } from './randomWords';
 
 interface Note {
@@ -49,12 +49,14 @@ export const createNote = (html: string) => {
 };
 
 export const deleteNote = (idToDelete?: string) => {
-	// After deleting a note, we show the last-edited note (if any)
-	const lastItem = get(sortedNotes).findLast(
-		(_) => _.key.toLowerCase() !== idToDelete?.toLowerCase()
-	) ?? { key: undefined };
-	currentId.set(lastItem.key);
-
+	const isCurrentNote = idToDelete === get(currentId);
+	if (isCurrentNote) {
+		const state = getHistoryState();
+		// After deleting the current note, go back to previous page
+		if (state.__notes?.previousHref) {
+			window.history.back();
+		}
+	}
 	if (idToDelete) {
 		notes.update((old) => {
 			const ret = { ...old };
@@ -70,7 +72,20 @@ const getCurrentIdFromUrl = () => {
 };
 const getPathForId = (id?: string) => (id ? `/${id}` : '/');
 const setCurrentIdInUrl = (newId?: string) => {
-	history.pushState(null, '', getPathForId(newId));
+	const previous = getCurrentIdFromUrl();
+	const typedNewNote = newId && !previous;
+
+	const cameFromNewPage = !getHistoryState().__notes?.previousHref;
+
+	if (typedNewNote && !cameFromNewPage) {
+		// When user clicked 'add' and then start typing,
+		//  make sure pressing 'back' doesnt go to an empty page
+		// 	but instead go to the page-before-user-clicked-add
+		history.replaceState(null, '', getPathForId(newId));
+	} else {
+		console.log('pushing');
+		history.pushState(null, '', getPathForId(newId));
+	}
 };
 export const currentId = urlStorage(KEYS.currentId, getCurrentIdFromUrl, setCurrentIdInUrl);
 

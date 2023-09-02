@@ -5,12 +5,19 @@ test('delete note', async ({ page, note }) => {
 	await page.goto('/');
 
 	await note.click();
+	await note.type('cache');
+
+	await page.goto('/');
+
+	await note.click();
 	await note.type('a');
 
 	const deleteButton = page.getByLabel('delete');
 	await deleteButton.click();
 
-	await expect(page, 'returns to empty note after deleting').toHaveURL(process.env.BASE_URL);
+	await expect(page, 'returns to empty note after deleting instead of cached note').toHaveURL(
+		process.env.BASE_URL
+	);
 
 	await note.click();
 	await note.type('b');
