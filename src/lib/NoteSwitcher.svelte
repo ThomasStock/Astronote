@@ -52,4 +52,4 @@
 		</div>
 	</div>
 {/if}
-<LinkButton view="search" class="bg-sky-300 hover:bg-sky-400">search</LinkButton>
+<LinkButton icon="search" view="search" class="bg-sky-300 hover:bg-sky-400"></LinkButton>

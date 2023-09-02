@@ -5,5 +5,5 @@
 		"allowJs": true,
 		"skipLibCheck": true
 	},
-	"include": ["tests/*.ts", "playwright.config.ts"]
+	"include": ["site/*.ts", "tests/*.ts", "playwright.config.ts"]
 }

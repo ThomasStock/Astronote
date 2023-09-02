@@ -57,22 +57,27 @@
 	bind:innerHTML
 />
 
-<nav class="fixed bottom-0 right-0 top-0 flex flex-col justify-center">
+<nav aria-label="menu" class="fixed bottom-0 right-0 top-0 flex flex-col justify-center">
 	<div class="flex flex-col items-end gap-6 p-4">
 		<NoteSwitcher />
 
 		{#if !noteIsEmpty}
-			<LinkButton href={'/'} onClick={handleAdd} class="bg-emerald-300 hover:bg-emerald-400"
-				>add</LinkButton
-			>
+			<LinkButton
+				icon="add"
+				href={'/'}
+				onClick={handleAdd}
+				class="bg-emerald-300 hover:bg-emerald-400"
+			></LinkButton>
 		{/if}
-		<LinkButton onClick={() => deleteNote($currentId)} class="bg-red-300 hover:bg-red-400"
-			>delete</LinkButton
-		>
+		<LinkButton
+			icon="delete"
+			onClick={() => deleteNote($currentId)}
+			class="bg-red-300 hover:bg-red-400"
+		></LinkButton>
 	</div>
 </nav>
 
-<nav class="fixed bottom-0 right-0 flex flex-col justify-center">
+<nav aria-label="dev menu" class="fixed bottom-0 right-0 flex flex-col justify-center">
 	<div class="flex flex-col items-end gap-2 p-4">
 		<DevTools />
 	</div>

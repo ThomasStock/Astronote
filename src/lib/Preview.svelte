@@ -30,7 +30,7 @@
 	</div>
 	<a
 		class=""
-		href="#"
+		href="#delete"
 		on:click={(e) => {
 			e.preventDefault();
 			e.stopPropagation();

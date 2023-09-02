@@ -1,31 +1,31 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { test } from 'site/base';
 
-test('url changes to note when typing and can be revisted', async ({ page }) => {
+test('create note', async ({ page, note }) => {
 	await page.goto('/');
 
-	const noteInput = page.locator('#Note');
-	await noteInput.click();
-	await noteInput.type('a');
+	await note.click();
+	await note.type('a');
 
 	const noteUrl = page.url();
 
 	expect(noteUrl, 'url changes to /somethingHere after typing a letter').toMatch(/^.*\w+$/);
 
 	await page.goto('/');
-	await noteInput.click();
-	await noteInput.type('b');
+	await note.click();
+	await note.type('b');
 
 	const secondNoteUrl = page.url();
 
 	await page.goto(noteUrl);
 	await expect(
-		noteInput,
+		note,
 		'A created note url can be revisted and shows the correct note content'
 	).toHaveText('a');
 
 	await page.goto(secondNoteUrl);
 	await expect(
-		noteInput,
+		note,
 		'A created note url can be revisted and shows the correct note content'
 	).toHaveText('b');
 });

@@ -1,11 +1,29 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { test } from 'site/base';
 
-test('delete note', async ({ page }) => {
+test('delete note', async ({ page, note }) => {
 	await page.goto('/');
 
-	const noteInput = page.locator('#Note');
-	await noteInput.click();
-	await noteInput.type('a');
+	await note.click();
+	await note.type('a');
 
-	const noteUrl = page.url();
+	const deleteButton = page.getByLabel('delete');
+	await deleteButton.click();
+
+	await expect(page, 'returns to empty note after deleting').toHaveURL(process.env.BASE_URL);
+
+	await note.click();
+	await note.type('b');
+
+	const bUrl = page.url();
+
+	const addButton = page.getByLabel('add');
+	await addButton.click();
+
+	await note.click();
+	await note.type('c');
+
+	await deleteButton.click();
+
+	await expect(page, 'returns to previous note after deleting').toHaveURL(bUrl);
 });

@@ -12,7 +12,7 @@
 		"check": "svelte-check --tsconfig ./tsconfig.json"
 	},
 	"devDependencies": {
-		"@sveltejs/vite-plugin-svelte": "^2.4.2",
+		"@sveltejs/vite-plugin-svelte": "^2.4.5",
 		"@tsconfig/svelte": "^5.0.0",
 		"@types/uuid": "^9.0.2",
 		"autoprefixer": "^10.4.14",
@@ -28,8 +28,8 @@
 	},
 	"dependencies": {
 		"@faker-js/faker": "^8.0.2",
-		"luxon": "^3.4.0",
 		"chokidar-cli": "^3.0.0",
+		"luxon": "^3.4.0",
 		"nodemon": "^3.0.1",
 		"prettier-plugin-svelte": "^3.0.3",
 		"typed-local-store": "^2.0.2",
