@@ -1,5 +1,5 @@
 <script>
-	import Note from './lib/Note.svelte';
+	import Note from './components/Note.svelte';
 </script>
 
 <Note />

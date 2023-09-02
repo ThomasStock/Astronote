@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { MouseEventHandler } from 'svelte/elements';
-	import { getUrlForView, type View } from './utils/store';
+	import { type View, getUrlForView } from 'store/view';
 
 	export let view: View | undefined = undefined;
 	export let href: string | undefined = undefined;

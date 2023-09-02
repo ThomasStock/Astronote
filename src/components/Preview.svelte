@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { HTMLBaseAttributes } from 'svelte/elements';
 	import { getFirstInnerText } from './utils/selection';
-	import { deleteNote } from './utils/store';
-	import Icon from './icons/Icon.svelte';
+	import { deleteNote } from 'store/deleteNote';
 
 	export let html: string;
 	export let id: string;
@@ -35,6 +34,6 @@
 			e.preventDefault();
 			e.stopPropagation();
 			deleteNote(id);
-		}}><Icon class="mr-2 fill-slate-300 text-2xl focus:fill-slate-700" name="delete" /></a
+		}}>del</a
 	>
 </div>

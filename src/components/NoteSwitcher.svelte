@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 	import Preview from './Preview.svelte';
-	import { sortedNotes, currentId, view } from './utils/store';
 	import LinkButton from './LinkButton.svelte';
+	import { currentId } from 'store/currentId';
+	import { sortedNotes } from 'store/sortedNotes';
+	import { view } from 'store/view';
 
 	$: open = $view === 'search';
 

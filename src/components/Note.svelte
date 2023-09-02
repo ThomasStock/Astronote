@@ -1,8 +1,12 @@
 <script lang="ts">
-	import { createNote, notes, note, currentId, deleteNote, view } from './utils/store';
 	import NoteSwitcher from './NoteSwitcher.svelte';
-	import DevTools from './DevTools.svelte';
+	import DevTools from './DevTools/DevTools.svelte';
 	import LinkButton from './LinkButton.svelte';
+	import { createNote } from 'store/createNote';
+	import { currentId } from 'store/currentId';
+	import { deleteNote } from 'store/deleteNote';
+	import { note } from 'store/note';
+	import { notes } from 'store/notes';
 
 	let innerHTML = '';
 

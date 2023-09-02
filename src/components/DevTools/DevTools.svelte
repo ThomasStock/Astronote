@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { createNote, generateId } from './utils/store';
 	import Button from './MyButton.svelte';
 	import { onMount } from 'svelte';
 	import type { Faker } from '@faker-js/faker';
+	import { createNote } from '../../store/createNote';
+	import { generateId } from '../../store/generateId';
 
 	// Delay load big lib
 	// https://svelte.dev/repl/16b375da9b39417dae837b5006799cb4?version=3.25.0
