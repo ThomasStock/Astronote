@@ -82,5 +82,3 @@
 		<DevTools />
 	</div>
 </nav>
-
-<!-- <a class="fixed bottom-0 left-0 right-0 block bg-slate-50 p-4 text-xl" href="#search">Search...</a> -->
