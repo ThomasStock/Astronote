@@ -5,6 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "playwright test",
+		"watch": "PWTEST_WATCH=1 playwright test",
 		"ui": "playwright test --ui"
 	},
 	"keywords": [],

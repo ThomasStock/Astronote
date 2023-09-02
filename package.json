@@ -4,7 +4,9 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
+		"dev": "npm run test:watch & vite",
+		"test:watch": "chokidar \"src/**/*.(ts|svelte)\" \"playwright/tests\" -c \"npm run test\"",
+		"test": "cd playwright && npm run test",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-check --tsconfig ./tsconfig.json"
@@ -27,6 +29,8 @@
 	"dependencies": {
 		"@faker-js/faker": "^8.0.2",
 		"luxon": "^3.4.0",
+		"chokidar-cli": "^3.0.0",
+		"nodemon": "^3.0.1",
 		"prettier-plugin-svelte": "^3.0.3",
 		"typed-local-store": "^2.0.2",
 		"uuid": "^9.0.0"
