@@ -5,11 +5,12 @@
 	import { note } from 'store/note';
 	import { notes } from 'store/notes';
 	import Menu from './Menu.svelte';
+	import { actions } from 'store/actions';
 
 	let innerHTML = '';
 
 	note.subscribe((_) => {
-		const newVal = $note?.html ?? '';
+		const newVal = _?.html ?? '';
 		if (innerHTML !== newVal) {
 			innerHTML = $note?.html ?? '';
 		}
@@ -43,6 +44,8 @@
 		// console.log('currentIndex', $currentIndex);
 		// console.log('currentId', $currentId);
 		// console.log('view', $view);
+		// console.log('noteChange', $noteChange?.html);
+		console.log($actions);
 	}
 </script>
 

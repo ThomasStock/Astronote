@@ -49,7 +49,7 @@
 		></LinkButton>
 	</div>
 </nav>
-<nav aria-label="undo-menu" class="fixed right-28 top-0 flex">
+<nav aria-label="undo-menu" class="fixed right-28 top-4 flex">
 	<LinkButton
 		icon="undo"
 		onClick={undo}

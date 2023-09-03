@@ -33,6 +33,7 @@
 		"luxon": "^3.4.0",
 		"nodemon": "^3.0.1",
 		"prettier-plugin-svelte": "^3.0.3",
+		"svelte-previous": "^2.1.4",
 		"typed-local-store": "^2.0.2",
 		"uuid": "^9.0.0",
 		"vite-tsconfig-paths": "^4.2.0"
