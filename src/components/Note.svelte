@@ -4,7 +4,6 @@
 	import { currentId } from 'store/currentId';
 	import { note } from 'store/note';
 	import { notes } from 'store/notes';
-	import WindowData from './DevTools/WindowData.svelte';
 	import Menu from './Menu.svelte';
 
 	let innerHTML = '';
@@ -32,14 +31,13 @@
 		}
 	}
 
-	$: noteIsEmpty = Boolean(!innerHTML.length);
+	let textContent: string;
+	$: noteIsEmpty = Boolean(!textContent?.length);
 
 	let noteElement: HTMLElement;
-	$: if (noteIsEmpty && noteElement) {
-		noteElement.focus();
-	}
 
 	$: {
+		// console.log('active', document.activeElement);
 		// console.log('#notes', $sortedNotes.length);
 		// console.log('#note', $note);
 		// console.log('currentIndex', $currentIndex);
@@ -53,6 +51,8 @@
 	contenteditable
 	placeholder="Type or paste here ..."
 	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
+	bind:this={noteElement}
+	bind:textContent
 	bind:innerHTML
 />
 

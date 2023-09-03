@@ -3,7 +3,7 @@
 
 	let viewportProp = window.visualViewport;
 	let height = viewportProp?.height;
-	let rand;
+	let rand: any;
 	function viewportHandler(event: Event) {
 		// var vp = event.target as VisualViewport;
 		console.log('handling', viewportProp?.height.toString());

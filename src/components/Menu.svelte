@@ -11,16 +11,15 @@
 	let deltaY = 0;
 
 	$: if (menu) {
-		const undersize = menu.offsetTop + menu.clientHeight;
-		if (undersize > $viewport) {
-			deltaY = undersize - $viewport;
-			console.log('for calc', deltaY, menu.offsetTop);
+		const menuDistanceFromBottom = menu.offsetTop + menu.clientHeight;
+		if (menuDistanceFromBottom > $viewport) {
+			deltaY = menuDistanceFromBottom - $viewport;
 			deltaY = Math.max(0, Math.min(deltaY, menu.offsetTop));
-			console.log(undersize, $viewport, deltaY);
 		}
 	}
 
 	$: handleAdd = (e: Event) => {
+		console.log('clicked add');
 		currentId.set(undefined);
 	};
 </script>
@@ -30,18 +29,15 @@
 	<div
 		bind:this={menu}
 		style={`transform: translateY(${-deltaY}px);`}
-		class="flex flex-col items-end gap-6 p-4"
+		class="flex flex-col items-end gap-6 p-4 transition-transform"
 	>
+		<LinkButton
+			icon="add"
+			href={'/'}
+			onClick={handleAdd}
+			class={`bg-emerald-300 hover:bg-emerald-400 ${noteIsEmpty ? 'invisible' : undefined}`}
+		></LinkButton>
 		<NoteSwitcher />
-
-		{#if !noteIsEmpty}
-			<LinkButton
-				icon="add"
-				href={'/'}
-				onClick={handleAdd}
-				class="bg-emerald-300 hover:bg-emerald-400"
-			></LinkButton>
-		{/if}
 		<LinkButton
 			icon="delete"
 			onClick={() => deleteNote($currentId)}
