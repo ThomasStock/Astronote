@@ -21,6 +21,6 @@
 	}}
 	class={`mr-2 flex h-16 w-16 items-center justify-center rounded-full text-white shadow ${
 		$$props.class
-	} ${hidden ? 'hidden' : undefined}`}
+	} ${hidden ? 'invisible -z-10' : undefined}`}
 	><span class="material-symbols-rounded text-4xl">{icon}</span></a
 >

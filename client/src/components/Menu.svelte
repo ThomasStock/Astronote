@@ -49,12 +49,12 @@
 		></LinkButton>
 	</div>
 </nav>
-<nav aria-label="action-menu" class="fixed right-28 top-4 flex">
+<nav aria-label="action-menu" class="fixed right-28 top-4 flex bg-red-300">
 	<LinkButton
 		icon="undo"
 		hidden={!$canUndo}
 		onClick={undo}
-		class={`bg-yellow-200 hover:bg-yellow-300 `}
+		class={`bg-yellow-200 hover:bg-yellow-300`}
 	></LinkButton>
 	<LinkButton
 		icon="redo"

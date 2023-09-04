@@ -4,22 +4,23 @@ import { get } from 'svelte/store';
 import { actions } from './actions';
 import { note } from './note';
 import { debounce } from './utils/debounce';
+import type { Note } from './notes';
 
 export const logTypingActions = () => {
 	const debouncer = debounce((func: () => void) => func());
-	let previousNote = { ...get(note) };
+	let previousNote: Note | undefined = undefined;
 	note.subscribe((newNote) => {
 		debouncer(() => {
 			console.log('debounced check', previousNote, newNote);
 			if (previousNote?.id !== newNote?.id) {
 				actions.update((a) => {
 					a.push({
-						type: 'currentId',
+						type: 'id',
 						from: previousNote?.id,
 						to: newNote?.id
 					});
 					console.log('pushing currentidchange');
-					previousNote = { ...newNote };
+					previousNote = { ...newNote! };
 					return a;
 				});
 
@@ -36,11 +37,11 @@ export const logTypingActions = () => {
 			actions.update((a) => {
 				a.push({
 					type: 'note',
-					from: previousNote,
-					to: newNote
+					from: { ...previousNote! },
+					to: { ...newNote! }
 				});
 				console.log('pushing');
-				previousNote = { ...newNote };
+				previousNote = { ...newNote! };
 				return a;
 			});
 		});

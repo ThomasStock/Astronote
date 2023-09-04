@@ -1,6 +1,22 @@
-import { derived, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
+import { notes, type Note } from './notes';
+import { currentId } from './currentId';
 
-export const actions = writable<{ [key: string]: any }[]>([]);
+interface TypeAction {
+	type: 'note';
+	from: Note | undefined;
+	to: Note;
+}
+
+interface CurrentIdAction {
+	type: 'id';
+	from: string | undefined;
+	to: string | undefined;
+}
+
+type Action = TypeAction | CurrentIdAction;
+
+export const actions = writable<Action[]>([]);
 
 export const backs = writable(0);
 
@@ -12,7 +28,22 @@ export const canUndo = derived(
 );
 
 export const undo = () => {
-	console.log('undoing');
+	const action = get(actions).at(-get(backs));
+	if (action) {
+		if (action.type === 'note') {
+			notes.update((n) => {
+				const id = action.to.id;
+				if (action.from) {
+					n[id] = { ...action.from };
+				} else {
+					//delete n[id];
+				}
+				// console.log('undid', action.to);
+				return n;
+			});
+		}
+	}
+
 	backs.update((_) => ++_);
 };
 
