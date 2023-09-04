@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "concurrently \"vite\" \"npm run test:watch\"",
-		"test:watch": "chokidar \"src/**/*.(ts|svelte)\" \"playwright/tests\" -c \"npm run test\"",
+		"test:watch": "chokidar \"src/**/*.(ts|svelte)\" \"../playwright/tests\" -c \"npm run test\"",
 		"test": "cd ../playwright && npm run test",
 		"build": "vite build",
 		"preview": "vite preview",
