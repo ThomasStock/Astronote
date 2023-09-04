@@ -13,7 +13,7 @@ export const createNote = (html: string) => {
 
 	currentId.set(newId);
 	notes.update((oldNotes) => {
-		const newNotes = { ...oldNotes, [newId]: { updatedOn: Date.now(), html } };
+		const newNotes = { ...oldNotes, [newId]: { id: newId, updatedOn: Date.now(), html } };
 		return newNotes;
 	});
 };

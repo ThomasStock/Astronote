@@ -52,12 +52,12 @@
 <nav aria-label="undo-menu" class="fixed right-28 top-4 flex">
 	<LinkButton
 		icon="undo"
-		onClick={undo}
-		class={`bg-yellow-200 hover:bg-yellow-300 ${$canUndo ? undefined : 'invisible'}`}
+		onClick={canUndo && undo}
+		class={`bg-yellow-200 hover:bg-yellow-300 ${$canUndo ? undefined : 'hidden'}`}
 	></LinkButton>
 	<LinkButton
 		icon="redo"
-		onClick={redo}
-		class={`bg-yellow-200 hover:bg-yellow-300 ${$canRedo ? undefined : 'invisible'}`}
+		onClick={canRedo && redo}
+		class={`bg-yellow-200 hover:bg-yellow-300 ${$canRedo ? undefined : 'hidden'}`}
 	></LinkButton>
 </nav>
