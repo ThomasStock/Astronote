@@ -4,7 +4,7 @@
 	import { currentId } from 'store/currentId';
 	import { deleteNote } from 'store/deleteNote';
 	import { rand, viewport } from 'store/visualViewport';
-	import { canUndo, canRedo, undo, redo } from 'store/actions';
+	import { canUndo, canRedo, undo, redo, actions } from 'store/actions';
 
 	export let noteIsEmpty: boolean;
 
@@ -49,15 +49,17 @@
 		></LinkButton>
 	</div>
 </nav>
-<nav aria-label="undo-menu" class="fixed right-28 top-4 flex">
+<nav aria-label="action-menu" class="fixed right-28 top-4 flex">
 	<LinkButton
 		icon="undo"
-		onClick={canUndo && undo}
-		class={`bg-yellow-200 hover:bg-yellow-300 ${$canUndo ? undefined : 'hidden'}`}
+		hidden={!$canUndo}
+		onClick={undo}
+		class={`bg-yellow-200 hover:bg-yellow-300 `}
 	></LinkButton>
 	<LinkButton
 		icon="redo"
-		onClick={canRedo && redo}
-		class={`bg-yellow-200 hover:bg-yellow-300 ${$canRedo ? undefined : 'hidden'}`}
+		hidden={!$canRedo}
+		onClick={redo}
+		class={`bg-yellow-200 hover:bg-yellow-300`}
 	></LinkButton>
 </nav>

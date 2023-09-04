@@ -12,7 +12,17 @@ export const logTypingActions = () => {
 		debouncer(() => {
 			console.log('debounced check', previousNote, newNote);
 			if (previousNote?.id !== newNote?.id) {
-				// ignore id changes, to be handled somewhere else.
+				actions.update((a) => {
+					a.push({
+						type: 'currentId',
+						from: previousNote?.id,
+						to: newNote?.id
+					});
+					console.log('pushing currentidchange');
+					previousNote = { ...newNote };
+					return a;
+				});
+
 				return;
 			}
 			if (!newNote?.html && !previousNote?.html) {
@@ -29,6 +39,7 @@ export const logTypingActions = () => {
 					from: previousNote,
 					to: newNote
 				});
+				console.log('pushing');
 				previousNote = { ...newNote };
 				return a;
 			});

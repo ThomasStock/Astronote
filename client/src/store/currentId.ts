@@ -18,7 +18,6 @@ const setCurrentIdInUrl = (newId?: string) => {
 		// 	but instead go to the page-before-user-clicked-add
 		history.replaceState(null, '', getPathForId(newId));
 	} else {
-		console.log('pushing');
 		history.pushState(null, '', getPathForId(newId));
 	}
 };
