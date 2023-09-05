@@ -18,7 +18,6 @@ export const undo = () => {
 	const command = $actions[$actions.length - 1 + get(historyIndex)];
 	if (command) {
 		command.undo();
-		command.log();
 		subscribers.forEach((sub) => sub(command, true));
 	}
 	historyIndex.update((_) => --_);
@@ -27,8 +26,6 @@ export const undo = () => {
 export const redo = () => {
 	const command = get(actions).at(get(historyIndex));
 	if (command) {
-		console.log('redoing', command);
-		command.log();
 		command.execute();
 		subscribers.forEach((sub) => sub(command, true));
 	}

@@ -7,12 +7,10 @@ export const typeCommand = (id: string, newValue: string): UndoableCommand => {
 	const oldValue = oldNote?.html ?? '';
 
 	const undo = () => {
-		console.log('undoing', oldValue);
 		updateNote(id, oldValue);
 	};
 
 	const execute = () => {
-		console.log('execute', newValue);
 		updateNote(id, newValue);
 	};
 

@@ -3,7 +3,6 @@
 	import { createNote } from 'store/createNote';
 	import { currentId } from 'store/currentId';
 	import { note } from 'store/note';
-	import { notes } from 'store/notes';
 	import Menu from './Menu.svelte';
 	import { debounce } from 'store/utils/debounce';
 	import { actions, historyIndex, run, subscribe } from '../commands/application';
@@ -14,7 +13,7 @@
 
 	// Instead of updating the store on every keypress, we debounce until the user stops typing
 	const debouncedType = debounce((input: string) => {
-		if (input != $note?.html) {
+		if (input != $note?.html && input && $note?.html) {
 			console.log(`x${input}y${$note?.html}z`);
 			run(typeCommand($currentId!, input));
 		}
