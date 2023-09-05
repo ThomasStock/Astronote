@@ -12,7 +12,7 @@ function searchNode(
 	}
 
 	for (let i = 0, len = startNode.childNodes.length; i < len; i++) {
-		if (searchNode(startNode, startNode.childNodes[i], predicate, true)) {
+		if (searchNode(startNode, startNode.childNodes[i]!, predicate, true)) {
 			return true;
 		}
 	}
@@ -123,7 +123,7 @@ function getAbsoluteOffset(container: Node, offset: number) {
 
 	let absoluteOffset = 0;
 	for (let i = 0, len = Math.min(container.childNodes.length, offset); i < len; i++) {
-		const childNode = container.childNodes[i];
+		const childNode = container.childNodes[i]!;
 		searchNode(childNode, childNode, (node) => {
 			if (node.nodeType === Node.TEXT_NODE) {
 				absoluteOffset += (node as Text).data.length;

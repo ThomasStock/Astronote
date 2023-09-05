@@ -4,7 +4,7 @@
 	import { currentId } from 'store/currentId';
 	import { deleteNote } from 'store/deleteNote';
 	import { rand, viewport } from 'store/visualViewport';
-	import { canUndo, canRedo, undo, redo, actions } from 'store/actions';
+	import { canUndo, canRedo, undo, redo } from '../commands/application';
 
 	export let noteIsEmpty: boolean;
 

@@ -11,9 +11,9 @@ export const createNote = (html: string) => {
 		newId = current;
 	}
 
-	currentId.set(newId);
 	notes.update((oldNotes) => {
 		const newNotes = { ...oldNotes, [newId]: { id: newId, updatedOn: Date.now(), html } };
 		return newNotes;
 	});
+	currentId.set(newId);
 };

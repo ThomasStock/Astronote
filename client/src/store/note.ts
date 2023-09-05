@@ -1,7 +1,6 @@
 import { derived } from 'svelte/store';
 import { currentId } from './currentId';
 import { notes, type Note } from './notes';
-import { logTypingActions } from './logTypingActions';
 
 export const note = derived<[typeof currentId, typeof notes], Note | undefined>(
 	[currentId, notes],
@@ -19,5 +18,3 @@ export const note = derived<[typeof currentId, typeof notes], Note | undefined>(
 		}
 	}
 );
-
-logTypingActions();

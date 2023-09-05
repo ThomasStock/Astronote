@@ -7,7 +7,7 @@ const views = ['search'];
 export type View = 'search';
 const getCurrenViewFromUrl = () => {
 	const viewFromUrl = location.hash.split('#')[1] ?? null;
-	if (views.indexOf(viewFromUrl) !== -1) {
+	if (viewFromUrl && views.indexOf(viewFromUrl) !== -1) {
 		return viewFromUrl as View;
 	}
 };

@@ -2,7 +2,7 @@ import { KEYS } from './utils/constants';
 import urlStorage, { getHistoryState } from './utils/urlStorage';
 
 const getCurrentIdFromUrl = () => {
-	const idFromUrl = location.pathname.split('/')[1] ?? null;
+	const idFromUrl = location.pathname.split('/')[1] ?? undefined;
 	return idFromUrl;
 };
 export const getPathForId = (id?: string) => (id ? `/${id}` : '/');

@@ -5,30 +5,37 @@
 	import { note } from 'store/note';
 	import { notes } from 'store/notes';
 	import Menu from './Menu.svelte';
-	import { actions } from 'store/actions';
+	import { debounce } from 'store/utils/debounce';
+	import { actions, historyIndex, run, subscribe } from '../commands/application';
+	import { typeCommand } from '../commands/typeCommand';
+	import { onMount } from 'svelte';
 
 	let innerHTML = '';
 
-	note.subscribe((_) => {
-		const newVal = _?.html ?? '';
-		if (innerHTML !== newVal) {
-			innerHTML = $note?.html ?? '';
+	// Instead of updating the store on every keypress, we debounce until the user stops typing
+	const debouncedType = debounce((input: string) => {
+		if (input != $note?.html) {
+			console.log(`x${input}y${$note?.html}z`);
+			run(typeCommand($currentId!, input));
 		}
 	});
 
-	$: {
-		const isTypingNewNote = !$note && innerHTML.length;
-		if (isTypingNewNote) {
-			createNote(innerHTML);
-		} else {
-			// should we use !== or != ?
-			const hasChangedNote = $note && innerHTML !== $note.html;
-			if (hasChangedNote) {
-				notes.update((_) => {
-					_[$currentId!].html = innerHTML;
-					return _;
-				});
+	$: debouncedType(innerHTML);
+
+	onMount(() => {
+		subscribe((command, undo) => {
+			if (command.type !== 'typeCommand' || undo) {
+				console.log('subbed and now setting html to ', command, $note?.html);
+				innerHTML = $note?.html ?? '';
 			}
+		});
+	});
+
+	$: {
+		// User typed a letter in a new note
+		const typedNewNote = !$note && innerHTML.length;
+		if (typedNewNote) {
+			createNote(innerHTML);
 		}
 	}
 
@@ -38,14 +45,9 @@
 	let noteElement: HTMLElement;
 
 	$: {
-		// console.log('active', document.activeElement);
-		// console.log('#notes', $sortedNotes.length);
-		// console.log('#note', $note);
-		// console.log('currentIndex', $currentIndex);
-		// console.log('currentId', $currentId);
-		// console.log('view', $view);
-		// console.log('noteChange', $noteChange?.html);
-		console.log($actions);
+		console.log('$note?.html', $note?.html);
+		console.log('historyIndex', $historyIndex);
+		console.log('actions', $actions);
 	}
 </script>
 
@@ -60,7 +62,6 @@
 />
 
 <Menu {noteIsEmpty} />
-
 <nav aria-label="dev menu" class="fixed bottom-0 right-0 flex flex-col justify-center">
 	<div class="flex flex-col items-end gap-2 p-4">
 		<DevTools />
