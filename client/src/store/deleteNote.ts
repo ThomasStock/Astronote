@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
 import { getHistoryState } from './utils/urlStorage';
 import { currentId } from './currentId';
-import { notes } from './notes';
+import { notesStore } from './notes';
 
 export const deleteNote = (idToDelete?: string) => {
 	const isCurrentNote = idToDelete === get(currentId);
@@ -13,7 +13,7 @@ export const deleteNote = (idToDelete?: string) => {
 		}
 	}
 	if (idToDelete) {
-		notes.update((old) => {
+		notesStore.update((old) => {
 			const ret = { ...old };
 			delete ret[idToDelete];
 			return ret;

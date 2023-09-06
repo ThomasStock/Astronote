@@ -1,7 +1,7 @@
 import { derived } from 'svelte/store';
-import { notes, type Note } from './notes';
+import { notesStore, type Note } from './notes';
 
-export const sortedNotes = derived(notes, ($notes) => {
+export const sortedNotesStore = derived(notesStore, ($notes) => {
 	return Object.keys($notes)
 		.map<{ key: string; value: Note }>((_) => ({
 			key: _,

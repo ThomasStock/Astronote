@@ -1,9 +1,9 @@
-import { notes } from 'store/notes';
+import { notesStore } from 'store/notes';
 import { get } from 'svelte/store';
 import type { UndoableCommand } from './types';
 
 export const typeCommand = (id: string, newValue: string): UndoableCommand => {
-	const oldNote = get(notes)[id];
+	const oldNote = get(notesStore)[id];
 	const oldValue = oldNote?.html ?? '';
 
 	const undo = () => {
@@ -15,7 +15,7 @@ export const typeCommand = (id: string, newValue: string): UndoableCommand => {
 	};
 
 	const log = () => {
-		console.log('from', oldValue, 'to', newValue);
+		console.log('id', id, 'from', oldValue, 'to', newValue);
 	};
 
 	return {
@@ -29,7 +29,7 @@ export const typeCommand = (id: string, newValue: string): UndoableCommand => {
 };
 
 const updateNote = (id: string, value: string) =>
-	notes.update(($notes) => {
+	notesStore.update(($notes) => {
 		if ($notes[id]) {
 			$notes[id]!.html = value;
 		}

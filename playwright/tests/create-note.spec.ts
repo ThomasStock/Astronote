@@ -5,7 +5,12 @@ test('create note', async ({ page, note }) => {
 	await page.goto('/');
 
 	await note.click();
-	await note.type('a');
+	await note.fill('a');
+
+	const undoButton = page.getByLabel('undo');
+	// Since we are debouncing typing, wait for the undo button to become visible
+	// This indicates that the note change is flushed.
+	await expect(undoButton, 'undo button becomes visible').toBeVisible();
 
 	const noteUrl = page.url();
 
@@ -13,7 +18,9 @@ test('create note', async ({ page, note }) => {
 
 	await page.goto('/');
 	await note.click();
-	await note.type('b');
+	await note.fill('b');
+
+	await expect(undoButton, 'undo button becomes visible').toBeVisible();
 
 	const secondNoteUrl = page.url();
 

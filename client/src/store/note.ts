@@ -1,9 +1,9 @@
 import { derived } from 'svelte/store';
 import { currentId } from './currentId';
-import { notes, type Note } from './notes';
+import { notesStore, type Note } from './notes';
 
-export const note = derived<[typeof currentId, typeof notes], Note | undefined>(
-	[currentId, notes],
+export const noteStore = derived<[typeof currentId, typeof notesStore], Note | undefined>(
+	[currentId, notesStore],
 	([$currentId, $notes], set) => {
 		if ($currentId) {
 			const casedKey = Object.keys($notes).find(

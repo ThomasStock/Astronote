@@ -19,4 +19,4 @@ export const getUrlForView = derived(currentId, ($currentId) => {
 const setCurrentViewInUrl = (newView?: View) => {
 	history.pushState(null, '', get(getUrlForView)(newView));
 };
-export const view = urlStorage<View>(KEYS.view, getCurrenViewFromUrl, setCurrentViewInUrl);
+export const viewStore = urlStorage<View>(KEYS.view, getCurrenViewFromUrl, setCurrentViewInUrl);

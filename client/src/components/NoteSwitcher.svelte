@@ -3,17 +3,17 @@
 	import Preview from './Preview.svelte';
 	import LinkButton from './LinkButton.svelte';
 	import { currentId } from 'store/currentId';
-	import { sortedNotes } from 'store/sortedNotes';
-	import { view } from 'store/view';
+	import { sortedNotesStore } from 'store/sortedNotes';
+	import { viewStore } from 'store/view';
 
-	$: open = $view === 'search';
+	$: open = $viewStore === 'search';
 
 	let containerElement: HTMLDivElement;
 
 	const outsideClickHandeler: EventListener = (e) => {
 		const clickedOutside = !containerElement.contains(e.target as Node);
 		if (clickedOutside) {
-			view.set(undefined);
+			viewStore.set(undefined);
 		}
 	};
 
@@ -40,7 +40,7 @@
 				class="flex h-auto max-h-full flex-col gap-4 overflow-y-auto rounded p-4"
 			>
 				<div>search input and close button here</div>
-				{#each $sortedNotes as note}
+				{#each $sortedNotesStore as note}
 					<Preview
 						class="w-full shrink-0 rounded-lg shadow-md drop-shadow-lg "
 						on:click={() => {

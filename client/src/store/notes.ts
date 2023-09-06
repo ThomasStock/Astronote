@@ -7,4 +7,4 @@ export interface Note {
 	html: string;
 }
 
-export const notes = storage<Record<string, Note>>(KEYS.notes, {});
+export const notesStore = storage<Record<string, Note>>(KEYS.notes, {});

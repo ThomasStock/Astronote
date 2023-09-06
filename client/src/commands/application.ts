@@ -37,6 +37,7 @@ export const subscribe = (onRun: (command: Command, undo?: boolean) => void) =>
 	subscribers.push(onRun);
 
 export const run = (command: Command) => {
+	command.log();
 	command.execute();
 	if (isUndoable(command)) {
 		actions.update(($actions) => {

@@ -2,8 +2,9 @@
 	import Button from './MyButton.svelte';
 	import { onMount } from 'svelte';
 	import type { Faker } from '@faker-js/faker';
-	import { createNote } from '../../store/createNote';
+	import { createNoteCommand } from '../../commands/createNoteCommand';
 	import { generateId } from '../../store/generateId';
+	import { run } from '../../commands/application';
 
 	// Delay load big lib
 	// https://svelte.dev/repl/16b375da9b39417dae837b5006799cb4?version=3.25.0
@@ -29,9 +30,9 @@
 	on:click={() => {
 		for (let i = 0; i < 10; i++) {
 			if (i % 2 === 0) {
-				createNote(`<a href="#">${faker?.internet.url()}</a>`);
+				run(createNoteCommand(`<a href="#">${faker?.internet.url()}</a>`));
 			} else {
-				createNote(faker?.lorem.paragraphs({ min: 1, max: 3 }, '<br/><br/>'));
+				run(createNoteCommand(faker?.lorem.paragraphs({ min: 1, max: 3 }, '<br/><br/>')));
 			}
 		}
 	}}>insert 10</Button

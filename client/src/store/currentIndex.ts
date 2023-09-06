@@ -1,8 +1,8 @@
 import { derived } from 'svelte/store';
 import { currentId } from './currentId';
-import { sortedNotes } from './sortedNotes';
+import { sortedNotesStore } from './sortedNotes';
 
-export const currentIndex = derived([sortedNotes, currentId], ([$sortedNotes, $currentId]) => {
+export const currentIndex = derived([sortedNotesStore, currentId], ([$sortedNotes, $currentId]) => {
 	if (!$currentId) {
 		// Trick the system into thinking we are the 'latest' note.
 		// Probably a bad idea to do this.

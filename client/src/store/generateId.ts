@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import { adjectives, nouns } from './utils/randomWords';
-import { notes } from './notes';
+import { notesStore } from './notes';
 
 /**
  * Create a cool url-friendly id like smokedCat1
@@ -22,7 +22,7 @@ export const generateId = (base?: string, attempt?: number): string => {
 	};
 	const result = getResult();
 
-	const alreadyExists = Boolean(get(notes)[result]);
+	const alreadyExists = Boolean(get(notesStore)[result]);
 	if (alreadyExists) {
 		return generateId(result, attempt ? attempt + 1 : 1); // add/increase the number postfix
 	}
