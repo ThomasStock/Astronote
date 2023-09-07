@@ -5,7 +5,7 @@
 	import { noteStore } from 'store/note';
 	import Menu from './Menu.svelte';
 	import { debounce } from 'store/utils/debounce';
-	import { actionsStore, run, subscribe } from '../commands/application';
+	import { run, subscribe } from '../commands/application';
 	import { isTypeCommand, typeCommand } from '../commands/typeCommand';
 	import { onMount } from 'svelte';
 	import type { ChangeEventHandler } from 'svelte/elements';
@@ -40,7 +40,7 @@
 			if (isTypeCommand(command) && (undo || redo)) {
 				nodeElement?.focus();
 
-				// re-set carret
+				// re-set carret after undo/redo typign
 				if (undo) {
 					setTimeout(() => {
 						setSelectionOffset(nodeElement!, ...command.oldSelectionOffset);
@@ -56,22 +56,12 @@
 	});
 
 	const editableChanged: ChangeEventHandler<HTMLElement> = (e) => {
-		// if (e.currentTarget.innerHTML !== innerHTML) {
-		let localoffset = getSelectionOffset(nodeElement);
-		console.log('debouncing[' + e.currentTarget.innerHTML + ']', localoffset);
-		debouncedType({ input: e.currentTarget.innerHTML, offset: localoffset });
-		// }
+		let offset = getSelectionOffset(nodeElement);
+		debouncedType({ input: e.currentTarget.innerHTML, offset });
 	};
 
 	let textContent: string;
 	$: noteIsEmpty = Boolean(!textContent?.length);
-
-	$: {
-		// console.log('$noteStore?.html', $noteStore?.html);
-		// console.log('historyIndex', $historyIndex);
-
-		console.log('actions', $actionsStore);
-	}
 </script>
 
 <main

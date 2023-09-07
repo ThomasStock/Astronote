@@ -14,3 +14,8 @@ export interface UndoableCommand extends Command {
 
 export const isUndoable = (command: Command | UndoableCommand): command is UndoableCommand =>
 	command.undoable;
+
+export type CommandSubscriber = (
+	command: Command,
+	meta?: { undo?: boolean; redo?: boolean }
+) => void;
