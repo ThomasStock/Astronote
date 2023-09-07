@@ -13,7 +13,7 @@ export const createNoteCommand = (html = ''): UndoableCommand => {
 			delete $notes[newId];
 			return $notes;
 		});
-		currentId.set(newId);
+		currentId.set(oldId);
 	};
 
 	const execute = () => {
@@ -25,7 +25,15 @@ export const createNoteCommand = (html = ''): UndoableCommand => {
 	};
 
 	const log = (undo?: boolean) => {
-		console.log((undo ? 'undid: ' : '') + 'createdNote', oldId, 'to', newId);
+		console.log(
+			(undo ? 'undid: ' : '') + 'createdNote[',
+			oldId,
+			']to[',
+			newId,
+			']with[',
+			html,
+			']'
+		);
 	};
 
 	return {

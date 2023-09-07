@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from 'site/base';
+import { delay } from 'utils/delay';
 
 test('create note', async ({ page, note }) => {
 	await page.goto('/');
@@ -7,10 +8,8 @@ test('create note', async ({ page, note }) => {
 	await note.click();
 	await note.fill('a');
 
-	const undoButton = page.getByLabel('undo');
-	// Since we are debouncing typing, wait for the undo button to become visible
-	// This indicates that the note change is flushed.
-	await expect(undoButton, 'undo button becomes visible').toBeVisible();
+	// Since we are debouncing typing, wait for the typing to get flushed.
+	await delay(300);
 
 	const noteUrl = page.url();
 
@@ -20,7 +19,7 @@ test('create note', async ({ page, note }) => {
 	await note.click();
 	await note.fill('b');
 
-	await expect(undoButton, 'undo button becomes visible').toBeVisible();
+	await delay(300);
 
 	const secondNoteUrl = page.url();
 

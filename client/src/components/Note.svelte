@@ -10,50 +10,36 @@
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { notesStore } from 'store/notes';
+	import type { ChangeEventHandler } from 'svelte/elements';
 
 	let innerHTML = '';
 
 	// Instead of updating the store on every keypress, we debounce until the user stops typing
 	const debouncedType = debounce((input: string) => {
-		if (input && innerHTML) {
-			// console.log(`x${input}y${$noteStore?.html}z`);
+		if ($currentId) {
 			run(typeCommand($currentId!, input));
+		} else {
+			run(createNoteCommand(input));
 		}
 	});
-
-	$: debouncedType(innerHTML);
 
 	onMount(() => {
 		innerHTML = $noteStore?.html ?? '';
 		subscribe((command, undo) => {
-			if (command.type === 'typeCommand' && undo) {
-				const noteHtml = $noteStore?.html ?? '';
-				if (noteHtml != innerHTML && noteHtml && innerHTML) {
-					console.log(`typeCommand happened!${noteHtml}xxx${innerHTML}yy`);
-					innerHTML = $noteStore?.html ?? '';
-				}
-			}
+			// if (command.type === 'typeCommand' && undo) {
+			const noteHtml = $noteStore?.html ?? '';
+			console.log(`external update[${noteHtml}]from[${innerHTML}]`);
+			innerHTML = noteHtml;
+			// }
 		});
 	});
 
-	$: {
-		// react on currentId change
-		$currentId;
-		// use get() to make sure we ONLU react on currentID change
-		const newHtml = ($currentId ? get(notesStore)[$currentId]?.html : '') ?? '';
-		if (newHtml != innerHTML && newHtml && innerHTML) {
-			console.log(`currentid changed!${newHtml}xxx${innerHTML}yy`);
-			innerHTML = newHtml;
-		}
-	}
-
-	$: {
-		// User typed a letter in a new note
-		const typedNewNote = !$noteStore && innerHTML.length;
-		if (typedNewNote) {
-			run(createNoteCommand());
-		}
-	}
+	const editableChanged: ChangeEventHandler<HTMLElement> = (e) => {
+		// if (e.currentTarget.innerHTML !== innerHTML) {
+		console.log('debouncing[' + e.currentTarget.innerHTML + ']');
+		debouncedType(e.currentTarget.innerHTML);
+		// }
+	};
 
 	let textContent: string;
 	$: noteIsEmpty = Boolean(!textContent?.length);
@@ -61,8 +47,8 @@
 	let noteElement: HTMLElement;
 
 	$: {
-		console.log('$noteStore?.html', $noteStore?.html);
-		console.log('historyIndex', $historyIndex);
+		// console.log('$noteStore?.html', $noteStore?.html);
+		// console.log('historyIndex', $historyIndex);
 		console.log('actions', $actions);
 	}
 </script>
@@ -71,6 +57,7 @@
 	id="Note"
 	contenteditable
 	placeholder="Type or paste here ..."
+	on:input={editableChanged}
 	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
 	bind:this={noteElement}
 	bind:textContent
