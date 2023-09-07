@@ -1,8 +1,13 @@
 import { notesStore } from 'store/notes';
 import { get } from 'svelte/store';
-import type { UndoableCommand } from './types';
+import type { Command, UndoableCommand } from './types';
 
-export const typeCommand = (id: string, newValue: string): UndoableCommand => {
+export const typeCommand = (
+	id: string,
+	newValue: string,
+	oldSelectionOffset: [number, number],
+	newSelectionOffset: [number, number]
+): TypeCommand => {
 	const oldNote = get(notesStore)[id];
 	const oldValue = oldNote?.html ?? '';
 
@@ -15,7 +20,7 @@ export const typeCommand = (id: string, newValue: string): UndoableCommand => {
 	};
 
 	const log = () => {
-		console.log('id', id, 'from', oldValue, 'to', newValue);
+		console.log('id', id, 'from', oldValue, oldSelectionOffset, 'to', newValue, newSelectionOffset);
 	};
 
 	return {
@@ -24,7 +29,10 @@ export const typeCommand = (id: string, newValue: string): UndoableCommand => {
 		undoable: true,
 		execute,
 		undo,
-		log
+		log,
+		oldSelectionOffset,
+		newSelectionOffset,
+		clearsUndoStack: true
 	};
 };
 
@@ -35,3 +43,11 @@ const updateNote = (id: string, value: string) =>
 		}
 		return $notes;
 	});
+
+export interface TypeCommand extends UndoableCommand {
+	oldSelectionOffset: [number, number];
+	newSelectionOffset: [number, number];
+}
+
+export const isTypeCommand = (command: Command): command is TypeCommand =>
+	command.type === 'typeCommand';

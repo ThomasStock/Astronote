@@ -135,9 +135,13 @@ function getAbsoluteOffset(container: Node, offset: number) {
 	return absoluteOffset;
 }
 
-export function getSelectionOffset(container: Node): [number, number] {
+export function getSelectionOffset(container: Node | undefined): [number, number] {
 	let start = 0;
 	let end = 0;
+
+	if (!container) {
+		return [start, end];
+	}
 
 	const selection = window.getSelection();
 	for (let i = 0, len = selection?.rangeCount as number; i < len; i++) {

@@ -42,6 +42,7 @@ export const createNoteCommand = (html = ''): UndoableCommand => {
 		undoable: true,
 		execute,
 		undo,
-		log
+		log,
+		clearsUndoStack: true
 	};
 };

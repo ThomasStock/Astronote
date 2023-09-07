@@ -4,6 +4,7 @@ export interface Command {
 	execute: () => void;
 	timestamp: number;
 	log: () => void;
+	clearsUndoStack?: boolean;
 }
 
 export interface UndoableCommand extends Command {

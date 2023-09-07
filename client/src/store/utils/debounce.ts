@@ -1,8 +1,16 @@
-export function debounce<T extends Function>(cb: T, wait = 250) {
+export function debounce<
+	T extends Function,
+	A = T extends (args: infer A, initialArgs: infer A | undefined) => void ? A : never
+>(cb: T, wait = 250) {
 	let h = 0;
-	let callable = (...args: any) => {
+	let initialArgs: any;
+	let callable = (args: A) => {
 		clearTimeout(h);
-		h = setTimeout(() => cb(...args), wait) as any;
+		h = setTimeout(() => {
+			cb(args, initialArgs);
+			initialArgs = args;
+			h = 0;
+		}, wait) as any;
 	};
-	return <T>(<any>callable);
+	return callable as (args: A) => void;
 }
