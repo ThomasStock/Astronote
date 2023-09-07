@@ -2,25 +2,32 @@ import { notesStore } from 'store/notes';
 import { get } from 'svelte/store';
 import type { Command, UndoableCommand } from './types';
 
-export const typeCommand = (
-	id: string,
-	newValue: string,
-	oldSelectionOffset: [number, number],
-	newSelectionOffset: [number, number]
-): TypeCommand => {
-	const oldNote = get(notesStore)[id];
-	const oldValue = oldNote?.html ?? '';
+interface TypeCommandParams {
+	id: string;
+	input: string;
+	oldInput: string;
+	oldOffset: [number, number];
+	newOffset: [number, number];
+}
+export const typeCommand = ({
+	id,
+	input,
+	oldInput,
+	oldOffset,
+	newOffset
+}: TypeCommandParams): TypeCommand => {
+	const oldValue = oldInput;
 
 	const undo = () => {
 		updateNote(id, oldValue);
 	};
 
 	const execute = () => {
-		updateNote(id, newValue);
+		updateNote(id, input);
 	};
 
 	const log = () => {
-		console.log('id', id, 'from', oldValue, oldSelectionOffset, 'to', newValue, newSelectionOffset);
+		console.log('id', id, 'from', oldValue, oldOffset, 'to', input, newOffset);
 	};
 
 	return {
@@ -30,19 +37,20 @@ export const typeCommand = (
 		execute,
 		undo,
 		log,
-		oldSelectionOffset,
-		newSelectionOffset
+		oldSelectionOffset: oldOffset,
+		newSelectionOffset: newOffset
 	};
 };
 
-const updateNote = (id: string, value: string) =>
+const updateNote = (id: string, value: string) => {
+	console.log('updating note:', id, value);
 	notesStore.update(($notes) => {
 		if ($notes[id]) {
 			$notes[id]!.html = value;
 		}
 		return $notes;
 	});
-
+};
 export interface TypeCommand extends UndoableCommand {
 	oldSelectionOffset: [number, number];
 	newSelectionOffset: [number, number];

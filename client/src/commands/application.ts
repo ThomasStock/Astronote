@@ -15,6 +15,7 @@ export const run = (command: Command) => {
 
 	// Did the user undo actions?
 	if (get(historyIndexStore)) {
+		console.log('clearing', get(historyIndexStore));
 		clearUndoneActions();
 	}
 
@@ -34,6 +35,7 @@ const clearUndoneActions = () => {
 	// Clear the 'undone' actions because they are no longer valid.
 	actionsStore.update((actions) => {
 		actions.splice(get(historyIndexStore));
+		console.log('new actions', JSON.stringify(actions));
 		return actions;
 	});
 	historyIndexStore.set(0);
@@ -51,6 +53,8 @@ export const undo = () => {
 	const command = $actions.at(get(historyIndexStore) - 1);
 	if (command) {
 		command.undo();
+		console.log('undone:');
+		command.log();
 
 		// Inform any interested parties of this command being undone
 		subscribers.forEach((sub) => sub(command, { undo: true }));

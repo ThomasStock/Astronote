@@ -2,7 +2,6 @@
 	import DevTools from './DevTools/DevTools.svelte';
 	import { createNoteCommand } from '../commands/createNoteCommand';
 	import { currentId } from 'store/currentId';
-	import { noteStore } from 'store/note';
 	import Menu from './Menu.svelte';
 	import { debounce } from 'store/utils/debounce';
 	import { run, subscribe } from '../commands/application';
@@ -11,23 +10,26 @@
 	import type { ChangeEventHandler } from 'svelte/elements';
 	import { getSelectionOffset, setSelectionOffset } from './utils/selection';
 	import { notesStore } from 'store/notes';
-	import { get } from 'svelte/store';
 	import type { TypeInfo } from './types';
+	import { noteStore } from 'store/note';
 
 	let nodeElement: HTMLElement | undefined;
 
-	let innerHTML = get(noteStore)?.html ?? '';
+	let innerHTML = $notesStore?.[$currentId!]?.html ?? '';
+
+	noteStore.subscribe((note) => (innerHTML = note?.html ?? ''));
 
 	// Instead of updating the store on every keypress, we debounce until the user stops typing
 	const debouncedType = debounce(({ input, offset }: TypeInfo, initialArgs?: TypeInfo) => {
 		// Get current carret position offset
 		const newOffset = getSelectionOffset(nodeElement);
 
-		// Get the offset of when the user started typing. Used for undo'ing.
+		// Used for undo'ing.
 		const oldOffset = initialArgs?.offset ?? [0, 0];
+		const oldInput = initialArgs?.previousInput ?? '';
 
 		if ($currentId) {
-			run(typeCommand($currentId, input, oldOffset, newOffset));
+			run(typeCommand({ id: $currentId, input, oldOffset, newOffset, oldInput }));
 		}
 		offset = newOffset;
 	});
@@ -37,14 +39,9 @@
 		run(createNoteCommand(innerHTML));
 	}
 
-	// React to $currentId changes: update screen to new note.
-	$: innerHTML = ($currentId ? get(notesStore)[$currentId]?.html : '') ?? '';
-
 	onMount(() => {
 		subscribe((command, meta) => {
 			const { undo, redo } = meta ?? {};
-			const noteHtml = $noteStore?.html ?? '';
-			innerHTML = noteHtml;
 			if (isTypeCommand(command) && (undo || redo)) {
 				// re-set carret after undo/redo typing
 				if (undo) {
@@ -62,9 +59,10 @@
 	});
 
 	const editableChanged: ChangeEventHandler<HTMLElement> = (e) => {
+		console.log('editableChanged');
 		const input = e.currentTarget.innerHTML;
 		const offset = getSelectionOffset(nodeElement);
-		debouncedType({ input, offset });
+		debouncedType({ input, offset, previousInput: innerHTML });
 	};
 
 	let textContent: string;
@@ -75,11 +73,11 @@
 	id="Note"
 	contenteditable
 	placeholder="Type or paste here ..."
-	on:input={editableChanged}
 	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
 	bind:this={nodeElement}
 	bind:textContent
 	bind:innerHTML
+	on:input={editableChanged}
 />
 
 <Menu {noteIsEmpty} />
