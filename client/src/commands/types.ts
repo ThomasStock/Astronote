@@ -1,10 +1,9 @@
 export interface Command {
 	type: 'typeCommand' | string;
-	undoable: boolean;
+	undoable?: boolean;
 	execute: () => void;
 	timestamp: number;
 	log: () => void;
-	clearsUndoStack?: boolean;
 }
 
 export interface UndoableCommand extends Command {
@@ -13,7 +12,7 @@ export interface UndoableCommand extends Command {
 }
 
 export const isUndoable = (command: Command | UndoableCommand): command is UndoableCommand =>
-	command.undoable;
+	(command as UndoableCommand).undoable;
 
 export type CommandSubscriber = (
 	command: Command,

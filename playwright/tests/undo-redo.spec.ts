@@ -23,7 +23,7 @@ test('undo-redo', async ({ page, note }) => {
 	await undoButton.click();
 
 	await expect(note, 'typing is undone after pressing undo').toBeEmpty();
-	await expect(page, 'returns to empty note after undoing').toHaveURL(process.env.BASE_URL);
+	await expect(page, 'returns to empty note after undoing').toHaveURL(noteUrl);
 
 	await expect(redoButton, 'redo button is visible after undoing action').toBeVisible();
 	await expect(undoButton, 'undo button is hidden after undoing action').toBeHidden();
@@ -33,7 +33,7 @@ test('undo-redo', async ({ page, note }) => {
 	await expect(redoButton, 'redo button is hidden after redoing action').toBeHidden();
 	await expect(undoButton, 'undo button is visible after redoing action').toBeVisible();
 
-	await expect(page, 'returns to note url when redoing').toHaveURL(noteUrl);
+	await expect(page, 'stays on note url when redoing').toHaveURL(noteUrl);
 
 	await note.type('def');
 	await delay(300);
@@ -61,13 +61,13 @@ test('undo-redo', async ({ page, note }) => {
 
 	await undoButton.click();
 
-	await expect(note, 'creating a note can be undone').toHaveText('');
-	await expect(page, 'creating a note (url) can be undone').toHaveURL(process.env.BASE_URL);
+	await expect(note, 'note is empty when undoing all actions').toHaveText('');
+	await expect(page, 'undoing all actions keeps you on the note').toHaveURL(noteUrl);
 
-	await expect(redoButton, 'redo button is visible after undoing note-creation').toBeVisible();
+	await expect(redoButton, 'redo button is visible after undoing last action').toBeVisible();
 	await expect(
 		undoButton,
-		'undo button is no longer visible after undoing note-creation that was the last undoable action'
+		'undo button is no longer visible after undoing last undoable action'
 	).toBeHidden();
 
 	await note.type('xx');

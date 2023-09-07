@@ -12,43 +12,41 @@
 	import { getSelectionOffset, setSelectionOffset } from './utils/selection';
 	import { notesStore } from 'store/notes';
 	import { get } from 'svelte/store';
+	import type { TypeInfo } from './types';
 
 	let nodeElement: HTMLElement | undefined;
 
-	let innerHTML = '';
+	let innerHTML = get(noteStore)?.html ?? '';
 
 	// Instead of updating the store on every keypress, we debounce until the user stops typing
-	const debouncedType = debounce(
-		(
-			{ input, offset }: { input: string; offset: [number, number] },
-			initialArgs?: { input: string; offset: [number, number] }
-		) => {
-			const newOffset = getSelectionOffset(nodeElement);
-			if ($currentId) {
-				run(typeCommand($currentId!, input, initialArgs?.offset ?? [0, 0], newOffset));
-			} else {
-				run(createNoteCommand(input));
-			}
-			offset = newOffset;
-		}
-	);
+	const debouncedType = debounce(({ input, offset }: TypeInfo, initialArgs?: TypeInfo) => {
+		// Get current carret position offset
+		const newOffset = getSelectionOffset(nodeElement);
 
-	$: {
-		$currentId;
-		innerHTML = ($currentId ? get(notesStore)[$currentId]?.html : '') ?? '';
+		// Get the offset of when the user started typing. Used for undo'ing.
+		const oldOffset = initialArgs?.offset ?? [0, 0];
+
+		if ($currentId) {
+			run(typeCommand($currentId, input, oldOffset, newOffset));
+		}
+		offset = newOffset;
+	});
+
+	$: if (!$currentId && innerHTML.length) {
+		// When we are currently not on a note and the user starts typing, create the note instantly.
+		run(createNoteCommand(innerHTML));
 	}
 
+	// React to $currentId changes: update screen to new note.
+	$: innerHTML = ($currentId ? get(notesStore)[$currentId]?.html : '') ?? '';
+
 	onMount(() => {
-		innerHTML = $noteStore?.html ?? '';
 		subscribe((command, meta) => {
 			const { undo, redo } = meta ?? {};
 			const noteHtml = $noteStore?.html ?? '';
 			innerHTML = noteHtml;
 			if (isTypeCommand(command) && (undo || redo)) {
-				console.log('focussing?');
-				nodeElement?.focus();
-
-				// re-set carret after undo/redo typign
+				// re-set carret after undo/redo typing
 				if (undo) {
 					setTimeout(() => {
 						setSelectionOffset(nodeElement!, ...command.oldSelectionOffset);
@@ -64,8 +62,9 @@
 	});
 
 	const editableChanged: ChangeEventHandler<HTMLElement> = (e) => {
-		let offset = getSelectionOffset(nodeElement);
-		debouncedType({ input: e.currentTarget.innerHTML, offset });
+		const input = e.currentTarget.innerHTML;
+		const offset = getSelectionOffset(nodeElement);
+		debouncedType({ input, offset });
 	};
 
 	let textContent: string;

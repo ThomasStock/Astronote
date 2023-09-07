@@ -31,8 +31,7 @@ export const typeCommand = (
 		undo,
 		log,
 		oldSelectionOffset,
-		newSelectionOffset,
-		clearsUndoStack: true
+		newSelectionOffset
 	};
 };
 

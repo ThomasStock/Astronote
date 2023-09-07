@@ -1,5 +1,6 @@
 import { writable, derived, get } from 'svelte/store';
 import { isUndoable, type Command, type UndoableCommand, type CommandSubscriber } from './types';
+import { currentId } from 'store/currentId';
 
 export const actionsStore = writable<UndoableCommand[]>([]);
 
@@ -12,12 +13,9 @@ export const subscribe = (onRun: CommandSubscriber) => subscribers.push(onRun);
 export const run = (command: Command) => {
 	command.execute();
 
-	// Does the command clear any undone actions?
-	if (command.clearsUndoStack) {
-		// Did the user undo actions?
-		if (get(historyIndexStore)) {
-			clearUndoneActions();
-		}
+	// Did the user undo actions?
+	if (get(historyIndexStore)) {
+		clearUndoneActions();
 	}
 
 	// Should we add the command to the undo stack?
@@ -50,7 +48,7 @@ export const canUndo = derived(
 
 export const undo = () => {
 	const $actions = get(actionsStore);
-	const command = $actions[$actions.length - 1 + get(historyIndexStore)];
+	const command = $actions.at(get(historyIndexStore) - 1);
 	if (command) {
 		command.undo();
 
@@ -71,7 +69,8 @@ export const redo = () => {
 	historyIndexStore.update((_) => ++_);
 };
 
-window.addEventListener('popstate', () => {
+// undo is per note
+currentId.subscribe(() => {
 	actionsStore.set([]);
 	historyIndexStore.set(0);
 });
