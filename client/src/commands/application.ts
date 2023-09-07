@@ -70,3 +70,8 @@ export const redo = () => {
 	}
 	historyIndexStore.update((_) => ++_);
 };
+
+window.addEventListener('popstate', () => {
+	actionsStore.set([]);
+	historyIndexStore.set(0);
+});

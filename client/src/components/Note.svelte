@@ -10,6 +10,8 @@
 	import { onMount } from 'svelte';
 	import type { ChangeEventHandler } from 'svelte/elements';
 	import { getSelectionOffset, setSelectionOffset } from './utils/selection';
+	import { notesStore } from 'store/notes';
+	import { get } from 'svelte/store';
 
 	let nodeElement: HTMLElement | undefined;
 
@@ -31,6 +33,11 @@
 		}
 	);
 
+	$: {
+		$currentId;
+		innerHTML = ($currentId ? get(notesStore)[$currentId]?.html : '') ?? '';
+	}
+
 	onMount(() => {
 		innerHTML = $noteStore?.html ?? '';
 		subscribe((command, meta) => {
@@ -38,6 +45,7 @@
 			const noteHtml = $noteStore?.html ?? '';
 			innerHTML = noteHtml;
 			if (isTypeCommand(command) && (undo || redo)) {
+				console.log('focussing?');
 				nodeElement?.focus();
 
 				// re-set carret after undo/redo typign

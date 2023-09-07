@@ -74,4 +74,15 @@ test('undo-redo', async ({ page, note }) => {
 
 	await expect(redoButton, 'redo button is no longer visible after creating a note').toBeHidden();
 	await expect(undoButton, 'undo button is visible after undoing second action').toBeVisible();
+
+	await page.goBack();
+
+	await expect(
+		redoButton,
+		'redo button is no longer visible after using browser history'
+	).toBeHidden();
+	await expect(
+		undoButton,
+		'undo button is no longer visible after using browser history'
+	).toBeHidden();
 });
