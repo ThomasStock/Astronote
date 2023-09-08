@@ -4,8 +4,8 @@
 	import { currentId } from 'store/currentId';
 	import { deleteNote } from 'store/deleteNote';
 	import { rand, viewport } from 'store/visualViewport';
-	import { canUndo, canRedo, undo, redo, run } from '../commands/application';
-	import { createNoteCommand } from '../commands/createNoteCommand';
+	import { createNote } from 'store/createNote';
+	import { canUndo, canRedo, undo, redo } from 'store/note';
 
 	export let noteIsEmpty: boolean;
 
@@ -21,7 +21,7 @@
 	}
 
 	$: handleAdd = (e: Event) => {
-		run(createNoteCommand(''));
+		createNote('');
 	};
 </script>
 
