@@ -19,8 +19,9 @@ export const noteStore = derived<[typeof currentId, typeof notesStore], Note | u
 	}
 );
 
+const DEBOUNCE_MS = 500;
+
 export const canRedo = derived([noteStore], ([note]) => {
-	console.log('canredo?', note?.historyIndex);
 	return note && note.historyIndex < 0;
 });
 
@@ -47,8 +48,6 @@ export const redo = () => {
 	nextVersions.find((_, i) => {
 		newHistoryIndex++;
 
-		console.log('checking', _, 'at', newHistoryIndex);
-
 		const newerVersion = nextVersions[i + 1];
 		if (!newerVersion) {
 			// this is the last candidate so return it
@@ -63,8 +62,6 @@ export const redo = () => {
 		}
 	});
 
-	console.log('IS', nextDebouncedVersion!, 'at', newHistoryIndex, note.versions);
-
 	notesStore.update((notes) => {
 		notes[note.id] = {
 			...note,
@@ -76,7 +73,6 @@ export const redo = () => {
 	});
 };
 
-const DEBOUNCE_MS = 500;
 export const undo = () => {
 	const note = get(noteStore);
 	if (!note) {
@@ -87,8 +83,6 @@ export const undo = () => {
 	const historyIndex = note.historyIndex;
 
 	const previousVersions = versions.slice(0, versions.length - 1 + historyIndex);
-
-	console.log({ previousVersions });
 
 	let newHistoryIndex = historyIndex;
 
@@ -101,8 +95,6 @@ export const undo = () => {
 	let previousDebouncedVersion: Note['versions'][number];
 	previousVersions.reverse().find((_, i) => {
 		newHistoryIndex--;
-
-		console.log('checking', _, 'at', newHistoryIndex);
 
 		const olderVersion = previousVersions[i + 1];
 		if (!olderVersion) {
@@ -118,8 +110,6 @@ export const undo = () => {
 			return true; // break loop
 		}
 	});
-
-	console.log('IS', previousDebouncedVersion!, 'at', newHistoryIndex, note.versions);
 
 	notesStore.update((notes) => {
 		notes[note.id] = {

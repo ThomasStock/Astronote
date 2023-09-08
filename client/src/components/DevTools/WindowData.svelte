@@ -6,7 +6,6 @@
 	let rand: any;
 	function viewportHandler(event: Event) {
 		// var vp = event.target as VisualViewport;
-		console.log('handling', viewportProp?.height.toString());
 		height = viewportProp?.height;
 	}
 
@@ -16,7 +15,6 @@
 
 		setInterval(() => {
 			const newViewport = viewportProp?.height.toString();
-			console.log('new:', newViewport, 'old:', height);
 			height = viewportProp?.height;
 			rand = Math.random();
 		}, 500);

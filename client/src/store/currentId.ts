@@ -10,8 +10,6 @@ const setCurrentIdInUrl = (newId?: string) => {
 	const previous = getCurrentIdFromUrl();
 	const typedNewNote = newId && !previous;
 
-	console.log({ previous, newId, typedNewNote });
-
 	const cameFromNewPage = !getHistoryState().__notes?.previousHref;
 
 	if (typedNewNote && !cameFromNewPage) {

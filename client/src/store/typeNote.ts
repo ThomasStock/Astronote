@@ -12,7 +12,7 @@ export const typeNote = (html: string) => {
 		const note = notes[id];
 
 		if (!note) {
-			console.log('Expected note to exist but it did not.');
+			console.warn('Expected note to exist but it did not.');
 			return notes;
 		}
 
@@ -23,8 +23,6 @@ export const typeNote = (html: string) => {
 			note.versions.splice(note.versions.length + note.historyIndex);
 			note.historyIndex = 0;
 		}
-
-		console.log('pushing html', html);
 
 		// store previous version
 		note.versions.push({ html: note.html, updatedOn: note.updatedOn });
