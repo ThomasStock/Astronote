@@ -15,13 +15,13 @@ export const run = (command: Command) => {
 
 	// Did the user undo actions?
 	if (get(historyIndexStore)) {
-		console.log('clearing', get(historyIndexStore));
 		clearUndoneActions();
 	}
 
 	// Should we add the command to the undo stack?
 	if (isUndoable(command)) {
 		actionsStore.update((actions) => {
+			console.log('pushing to actions:', command.log());
 			actions.push(command);
 			return actions;
 		});
@@ -35,7 +35,11 @@ const clearUndoneActions = () => {
 	// Clear the 'undone' actions because they are no longer valid.
 	actionsStore.update((actions) => {
 		actions.splice(get(historyIndexStore));
-		console.log('new actions', JSON.stringify(actions));
+		console.log(
+			'new actions',
+			JSON.stringify(actions, null, 2),
+			JSON.stringify(actions.map((a) => a.log()))
+		);
 		return actions;
 	});
 	historyIndexStore.set(0);

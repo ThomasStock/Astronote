@@ -4,7 +4,7 @@
 	import { currentId } from 'store/currentId';
 	import Menu from './Menu.svelte';
 	import { debounce } from 'store/utils/debounce';
-	import { run, subscribe } from '../commands/application';
+	import { actionsStore, run, subscribe } from '../commands/application';
 	import { isTypeCommand, typeCommand } from '../commands/typeCommand';
 	import { onMount } from 'svelte';
 	import type { ChangeEventHandler } from 'svelte/elements';
@@ -14,10 +14,11 @@
 	import { noteStore } from 'store/note';
 
 	let nodeElement: HTMLElement | undefined;
+	const getNoteStoreHtml = () => $notesStore?.[$currentId!]?.html ?? '';
 
-	let innerHTML = $notesStore?.[$currentId!]?.html ?? '';
+	let innerHTML = getNoteStoreHtml();
 
-	noteStore.subscribe((note) => (innerHTML = note?.html ?? ''));
+	noteStore.subscribe(() => (innerHTML = getNoteStoreHtml()));
 
 	// Instead of updating the store on every keypress, we debounce until the user stops typing
 	const debouncedType = debounce(({ input, offset }: TypeInfo, initialArgs?: TypeInfo) => {
@@ -27,6 +28,8 @@
 		// Used for undo'ing.
 		const oldOffset = initialArgs?.offset ?? [0, 0];
 		const oldInput = initialArgs?.previousInput ?? '';
+
+		console.log('old input', oldInput);
 
 		if ($currentId) {
 			run(typeCommand({ id: $currentId, input, oldOffset, newOffset, oldInput }));
@@ -49,7 +52,6 @@
 						setSelectionOffset(nodeElement!, ...command.oldSelectionOffset);
 					}, 0);
 				} else {
-					setSelectionOffset(nodeElement!, ...command.newSelectionOffset);
 					setTimeout(() => {
 						setSelectionOffset(nodeElement!, ...command.newSelectionOffset);
 					}, 0);
@@ -59,10 +61,10 @@
 	});
 
 	const editableChanged: ChangeEventHandler<HTMLElement> = (e) => {
-		console.log('editableChanged');
+		console.log('previousHtml', getNoteStoreHtml());
 		const input = e.currentTarget.innerHTML;
 		const offset = getSelectionOffset(nodeElement);
-		debouncedType({ input, offset, previousInput: innerHTML });
+		debouncedType({ input, offset, previousInput: getNoteStoreHtml() });
 	};
 
 	let textContent: string;

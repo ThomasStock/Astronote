@@ -5,10 +5,13 @@ export function debounce<
 	let h = 0;
 	let initialArgs: any;
 	let callable = (args: A) => {
+		if (h === 0) {
+			// we started debouncing
+			initialArgs = args;
+		}
 		clearTimeout(h);
 		h = setTimeout(() => {
 			cb(args, initialArgs);
-			initialArgs = args;
 			h = 0;
 		}, wait) as any;
 	};
