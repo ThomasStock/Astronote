@@ -6,10 +6,10 @@ export const createNote = (html: string) => {
 	const newId = generateId();
 
 	const versions = [{ html: '', updatedOn: Date.now() }];
-	if (html) {
-		// create 2 versions: 1 empty and 1 with the initial value (so we can 'undo' to empty note)
-		versions.push({ html, updatedOn: Date.now() });
-	}
+	// if (html) {
+	// 	// create 2 versions: 1 empty and 1 with the initial value (so we can 'undo' to empty note)
+	// 	versions.push({ html, updatedOn: Date.now() });
+	// }
 
 	notesStore.update((notes) => {
 		const newNotes = {

@@ -13,7 +13,7 @@ test('undo-redo', async ({ page, note }) => {
 
 	await note.type('abc');
 	// wait for debounce
-	await delay(300);
+	await expect(note).toHaveText('abc');
 
 	const noteUrl = page.url();
 
@@ -35,8 +35,9 @@ test('undo-redo', async ({ page, note }) => {
 
 	await expect(page, 'stays on note url when redoing').toHaveURL(noteUrl);
 
+	await note.click();
 	await note.type('def');
-	await delay(300);
+	await expect(note).toHaveText('abcdef');
 
 	await undoButton.click();
 
@@ -45,8 +46,9 @@ test('undo-redo', async ({ page, note }) => {
 	await expect(redoButton, 'redo button is visible after undoing second action').toBeVisible();
 	await expect(undoButton, 'undo button is visible after undoing second action').toBeVisible();
 
+	await note.click();
 	await note.type('xxx');
-	await delay(300);
+	await expect(note).toHaveText('abcxxx');
 
 	await expect(note, 'abc becomes abcxxx after typing when in "undone" state').toHaveText('abcxxx');
 
@@ -70,7 +72,9 @@ test('undo-redo', async ({ page, note }) => {
 		'undo button is no longer visible after undoing last undoable action'
 	).toBeHidden();
 
+	await note.click();
 	await note.type('xx');
+	await delay(300);
 
 	await expect(redoButton, 'redo button is no longer visible after creating a note').toBeHidden();
 	await expect(undoButton, 'undo button is visible after undoing second action').toBeVisible();

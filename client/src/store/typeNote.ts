@@ -19,6 +19,13 @@ export const typeNote = (html: string) => {
 		note.html = html;
 		note.updatedOn = new Date().getTime();
 
+		if (note.historyIndex) {
+			note.versions.splice(note.versions.length + note.historyIndex);
+			note.historyIndex = 0;
+		}
+
+		console.log('pushing html', html);
+
 		// store previous version
 		note.versions.push({ html: note.html, updatedOn: note.updatedOn });
 
