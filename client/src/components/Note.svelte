@@ -11,17 +11,16 @@
 	let nodeElement: HTMLElement | undefined;
 
 	let innerHTML = $notesStore[$currentId!]?.html ?? '';
-	noteStore.subscribe((note) => (innerHTML = note?.html ?? ''));
-
-	$: if (!$currentId && innerHTML.length) {
-		// When we are currently not on a note and the user starts typing, create the note instantly.
-		createNote(innerHTML);
-	}
+	noteStore.subscribe((note) => {
+		innerHTML = note?.html ?? '';
+	});
 
 	const handleUserInput: FormEventHandler<HTMLElement> = (e) => {
 		if (!$currentId) {
+			console.log('creating', innerHTML);
 			createNote(innerHTML);
 		} else {
+			console.log('typing', innerHTML);
 			typeNote(innerHTML);
 		}
 	};

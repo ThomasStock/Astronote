@@ -4,9 +4,8 @@ import { test } from 'site/base';
 test('add button', async ({ page, note }) => {
 	await page.goto('/');
 
-	await note.click();
 	await note.type('a');
-	await note.press('Backspace');
+	await note.locator.press('Backspace');
 
 	const addButton = page.getByLabel('add');
 
@@ -16,5 +15,5 @@ test('add button', async ({ page, note }) => {
 
 	await addButton.click();
 
-	await expect(note, 'note is cleared after adding a new note').toBeEmpty();
+	await expect(note.locator, 'note is cleared after adding a new note').toBeEmpty();
 });

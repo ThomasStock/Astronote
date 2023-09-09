@@ -15,6 +15,8 @@ export const noteStore = derived<[typeof currentId, typeof notesStore], Note | u
 				const newNote = $notes[casedKey];
 				set(newNote);
 			}
+		} else {
+			set(undefined);
 		}
 	}
 );

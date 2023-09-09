@@ -1,8 +1,10 @@
 import { expect } from '@playwright/test';
 import { test } from 'site/base';
-import { delay } from 'utils/delay';
 
 test('undo-redo', async ({ page, note }) => {
+	// delay after typing stuff, to deal with undo debounce mechanism
+	note.setDelay(550);
+
 	await page.goto('/');
 
 	const redoButton = page.getByLabel('redo');
@@ -12,9 +14,8 @@ test('undo-redo', async ({ page, note }) => {
 	await expect(undoButton, 'undo button is hidden at start').toBeHidden();
 
 	await note.type('abc');
-	// wait for debounce
-	await delay(550);
-	await expect(note).toHaveText('abc');
+
+	await expect(note.locator).toHaveText('abc');
 
 	const noteUrl = page.url();
 
@@ -23,7 +24,7 @@ test('undo-redo', async ({ page, note }) => {
 
 	await undoButton.click();
 
-	await expect(note, 'typing is undone after pressing undo').toBeEmpty();
+	await expect(note.locator, 'typing is undone after pressing undo').toBeEmpty();
 	await expect(page, 'returns to empty note after undoing').toHaveURL(noteUrl);
 
 	await expect(redoButton, 'redo button is visible after undoing action').toBeVisible();
@@ -36,23 +37,22 @@ test('undo-redo', async ({ page, note }) => {
 
 	await expect(page, 'stays on note url when redoing').toHaveURL(noteUrl);
 
-	await note.click();
 	await note.type('def');
-	await delay(550);
-	await expect(note).toHaveText('abcdef');
+	await expect(note.locator).toHaveText('abcdef');
 
 	await undoButton.click();
 
-	await expect(note, 'abcdef can be undone to abc').toHaveText('abc');
+	await expect(note.locator, 'abcdef can be undone to abc').toHaveText('abc');
 
 	await expect(redoButton, 'redo button is visible after undoing second action').toBeVisible();
 	await expect(undoButton, 'undo button is visible after undoing second action').toBeVisible();
 
-	await note.click();
 	await note.type('xxx');
-	await expect(note).toHaveText('abcxxx');
+	await expect(note.locator).toHaveText('abcxxx');
 
-	await expect(note, 'abc becomes abcxxx after typing when in "undone" state').toHaveText('abcxxx');
+	await expect(note.locator, 'abc becomes abcxxx after typing when in "undone" state').toHaveText(
+		'abcxxx'
+	);
 
 	await expect(
 		redoButton,
@@ -61,11 +61,11 @@ test('undo-redo', async ({ page, note }) => {
 
 	await undoButton.click();
 
-	await expect(note, 'abcxxx can be undone to abc').toHaveText('abc');
+	await expect(note.locator, 'abcxxx can be undone to abc').toHaveText('abc');
 
 	await undoButton.click();
 
-	await expect(note, 'note is empty when undoing all actions').toHaveText('');
+	await expect(note.locator, 'note is empty when undoing all actions').toHaveText('');
 	await expect(page, 'undoing all actions keeps you on the note').toHaveURL(noteUrl);
 
 	await expect(redoButton, 'redo button is visible after undoing last action').toBeVisible();
@@ -74,9 +74,7 @@ test('undo-redo', async ({ page, note }) => {
 		'undo button is no longer visible after undoing last undoable action'
 	).toBeHidden();
 
-	await note.click();
 	await note.type('xx');
-	await delay(550);
 
 	await expect(redoButton, 'redo button is no longer visible after creating a note').toBeHidden();
 	await expect(undoButton, 'undo button is visible after undoing second action').toBeVisible();
