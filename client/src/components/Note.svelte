@@ -17,10 +17,8 @@
 
 	const handleUserInput: FormEventHandler<HTMLElement> = (e) => {
 		if (!$currentId) {
-			console.log('creating', innerHTML);
 			createNote(innerHTML);
 		} else {
-			console.log('typing', innerHTML);
 			typeNote(innerHTML);
 		}
 	};

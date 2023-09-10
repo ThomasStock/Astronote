@@ -12,7 +12,6 @@ test('create note', async ({ page, note }) => {
 
 	await page.goBack();
 
-	console.log(process.env.BASE_URL);
 	expect(page.url(), 'url changes back to initial url after going back').toBe(process.env.BASE_URL);
 
 	await note.type('b');

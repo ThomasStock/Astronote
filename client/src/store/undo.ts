@@ -9,7 +9,6 @@ export const canRedo = derived([noteStore], ([note]) => {
 });
 
 export const canUndo = derived([noteStore], ([note]) => {
-	console.log('note', note);
 	return note && note.versions.length - 1 + note.historyIndex > 0;
 });
 
