@@ -5,7 +5,7 @@
 	import { deleteNote } from 'store/deleteNote';
 	import { rand, viewport } from 'store/visualViewport';
 	import { createNote } from 'store/createNote';
-	import { canUndo, canRedo, undo, redo } from 'store/note';
+	import { canUndo, canRedo, undo, redo } from 'store/undo';
 
 	export let noteIsEmpty: boolean;
 

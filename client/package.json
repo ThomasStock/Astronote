@@ -10,7 +10,8 @@
 		"test": "cd ../playwright && npm run test",
 		"build": "vite build",
 		"preview": "vite preview",
-		"check": "svelte-check --tsconfig ./tsconfig.json"
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"generate": "npx supabase gen types typescript --project-id \"etpgbfsepsrnbclzdcno\" --schema public > src/api/types/supabase.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/vite-plugin-svelte": "^2.4.5",
@@ -29,11 +30,13 @@
 	},
 	"dependencies": {
 		"@faker-js/faker": "^8.0.2",
+		"@supabase/supabase-js": "^2.33.1",
 		"chokidar-cli": "^3.0.0",
 		"concurrently": "^8.2.1",
 		"luxon": "^3.4.2",
 		"nodemon": "^3.0.1",
 		"prettier-plugin-svelte": "^3.0.3",
+		"supabase": "^1.93.0",
 		"svelte-previous": "^2.1.4",
 		"typed-local-store": "^2.0.2",
 		"uuid": "^9.0.0",
