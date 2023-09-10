@@ -5,7 +5,7 @@ export const note = (page: Page) => {
 	const locator = page.locator('#Note');
 
 	// increase when working with undo, since undo undoes everything that happened without 500ms
-	let delayAfterType = 50;
+	let delayAfterType = 500;
 	return {
 		locator: locator,
 		setDelay: (ms: number) => {

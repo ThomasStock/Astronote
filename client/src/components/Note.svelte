@@ -8,16 +8,18 @@
 	import type { FormEventHandler } from 'svelte/elements';
 	import { typeNote } from 'store/typeNote';
 
-	let nodeElement: HTMLElement | undefined;
-
 	let innerHTML = $notesStore[$currentId!]?.html ?? '';
 	noteStore.subscribe((note) => {
 		innerHTML = note?.html ?? '';
 	});
 
 	const handleUserInput: FormEventHandler<HTMLElement> = (e) => {
-		if (!$currentId) {
+		const noKeyWasChosenYet = !$currentId;
+		const noteWithKeyDoesNotExistYet = !$noteStore;
+		if (noKeyWasChosenYet) {
 			createNote(innerHTML);
+		} else if (noteWithKeyDoesNotExistYet) {
+			createNote(innerHTML, $currentId);
 		} else {
 			typeNote(innerHTML);
 		}
@@ -32,7 +34,6 @@
 	contenteditable
 	placeholder="Type or paste here ..."
 	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
-	bind:this={nodeElement}
 	bind:textContent
 	bind:innerHTML
 	on:input={handleUserInput}

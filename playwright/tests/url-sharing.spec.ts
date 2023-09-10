@@ -1,10 +1,13 @@
 import { expect } from '@playwright/test';
 import { test } from 'site/base';
+import { delay } from 'utils/delay';
 
 test('Open url in different browser', async ({ page, browser, note }) => {
 	await page.goto('/');
 
 	await note.type('foo');
+
+	await delay(400);
 
 	const noteUrl = page.url();
 
@@ -16,7 +19,3 @@ test('Open url in different browser', async ({ page, browser, note }) => {
 
 	await expect(note2.locator).toHaveText('foo');
 });
-
-// postgresql policy example allow insert update delete on a table for anonymous users
-// https://www.postgresql.org/docs/9.1/sql-grant.html
-// GRANT SELECT, INSERT, UPDATE, DELETE ON products TO anonymous;
