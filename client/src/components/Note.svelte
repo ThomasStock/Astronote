@@ -14,6 +14,7 @@
 	});
 
 	const handleUserInput: FormEventHandler<HTMLElement> = (e) => {
+		console.log('handling user input');
 		const noKeyWasChosenYet = !$currentId;
 		const noteWithKeyDoesNotExistYet = !$noteStore;
 		if (noKeyWasChosenYet) {
@@ -25,8 +26,7 @@
 		}
 	};
 
-	let textContent: string;
-	$: noteIsEmpty = Boolean(!textContent?.length);
+	$: console.log('notes', $notesStore);
 </script>
 
 <main
@@ -34,12 +34,11 @@
 	contenteditable
 	placeholder="Type or paste here ..."
 	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
-	bind:textContent
 	bind:innerHTML
 	on:input={handleUserInput}
 />
 
-<Menu {noteIsEmpty} />
+<Menu />
 <nav aria-label="dev menu" class="fixed bottom-0 right-0 flex flex-col justify-center">
 	<div class="flex flex-col items-end gap-2 p-4">
 		<DevTools />

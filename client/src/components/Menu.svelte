@@ -4,10 +4,8 @@
 	import { currentId } from 'store/currentId';
 	import { deleteNote } from 'store/deleteNote';
 	import { rand, viewport } from 'store/visualViewport';
-	import { createNote } from 'store/createNote';
 	import { canUndo, canRedo, undo, redo } from 'store/undo';
-
-	export let noteIsEmpty: boolean;
+	import { startNewNote } from 'store/startNewNote';
 
 	let menu: HTMLDivElement;
 	let deltaY = 0;
@@ -20,16 +18,15 @@
 		}
 	}
 
-	$: handleAdd = (e: Event) => {
-		createNote('');
+	$: disableAddButton = Boolean(!$currentId);
+
+	$: handleAdd = () => {
+		startNewNote();
 	};
 </script>
 
 <div class="fixed -z-50 opacity-0">{$rand}</div>
-<nav
-	aria-label="menu"
-	class="fixed bottom-0 right-0 top-0 flex flex-col justify-center bg-green-200"
->
+<nav aria-label="menu" class="fixed bottom-0 right-0 top-0 flex flex-col justify-center">
 	<div
 		bind:this={menu}
 		style={`transform: translateY(${-deltaY}px);`}
@@ -39,7 +36,7 @@
 			icon="add"
 			href={'/'}
 			onClick={handleAdd}
-			class={`bg-emerald-300 hover:bg-emerald-400 ${noteIsEmpty ? 'invisible' : undefined}`}
+			class={`bg-emerald-300 hover:bg-emerald-400 ${disableAddButton ? 'invisible' : undefined}`}
 		></LinkButton>
 		<NoteSwitcher />
 		<LinkButton
@@ -49,7 +46,7 @@
 		></LinkButton>
 	</div>
 </nav>
-<nav aria-label="action-menu" class="fixed right-28 top-4 flex bg-red-300">
+<nav aria-label="action-menu" class="fixed right-28 top-4 flex">
 	<LinkButton
 		icon="undo"
 		hidden={!$canUndo}

@@ -1,32 +1,42 @@
 import { currentId } from 'store/currentId';
-import { note } from './note';
+import { noteApi } from './note';
 import { notesStore, type Note } from 'store/notes';
 import { noteStore } from 'store/note';
 import { debounce } from 'store/utils/debounce';
+import { get } from 'svelte/store';
 
 export const init = () => {
-	currentId.subscribe(async (newId) => {
+	currentId.subscribe(async (id) => {
 		// get note from supabase
-		if (newId) {
-			const { error, data } = await note.get(newId);
+		if (id) {
+			const { error, data } = await noteApi.get(id);
 
 			if (error) {
 				console.log('dbNote.error while retrieving', error);
 			}
 
-			if (data?.data) {
-				const note = data.data as any as Note;
-				console.log('retrieved from db', note);
-				notesStore.update((notes) => {
-					return { ...notes, [newId]: note };
-				});
+			const noteNotInDatabase = !data?.data;
+			if (noteNotInDatabase) {
+				return;
 			}
+
+			const dbNote = data.data as any as Note;
+
+			const localNote = get(notesStore)[id];
+			const localNoteIsMoreRecent = localNote && localNote.updatedOn > dbNote.updatedOn;
+			if (localNoteIsMoreRecent) {
+				return;
+			}
+
+			notesStore.update((notes) => {
+				return { ...notes, [id]: dbNote };
+			});
 		}
 	});
 
 	const debouncedUpdate = debounce(async (newNote: Note | undefined) => {
 		if (newNote) {
-			const { error, data, status, statusText } = await note.update(newNote);
+			const { error, data, status, statusText } = await noteApi.update(newNote);
 			if (error) {
 				if (error.code === '20') {
 					// do nothing because we aborted due to more recent update

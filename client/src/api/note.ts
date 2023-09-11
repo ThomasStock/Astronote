@@ -3,7 +3,7 @@ import { supabase } from './db';
 import type { Json } from './types/supabase';
 
 let ac = new AbortController();
-export const note = {
+export const noteApi = {
 	get: async (key: string) => {
 		return await supabase.from('url').select().eq('id', key).maybeSingle();
 	},
