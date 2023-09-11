@@ -26,7 +26,10 @@
 </script>
 
 <div class="fixed -z-50 opacity-0">{$rand}</div>
-<nav aria-label="menu" class="fixed bottom-0 right-0 top-0 flex flex-col justify-center">
+<nav
+	aria-label="menu"
+	class="fixed bottom-0 right-0 top-0 flex flex-col justify-center bg-[#002109] bg-[url('/public/leather.png')] px-4"
+>
 	<div
 		bind:this={menu}
 		style={`transform: translateY(${-deltaY}px);`}

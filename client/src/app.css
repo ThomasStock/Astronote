@@ -9,3 +9,27 @@
 		'GRAD' 0,
 		'opsz' 32;
 }
+
+@layer components {
+	.bg2 {
+		@apply before:bg-[url('/public/leaves.webp')] before:opacity-60;
+	}
+	.bg3 {
+		@apply before:bg-[url('/public/45degreee_fabric.webp')] before:opacity-70;
+	}
+	.bg4 {
+		@apply before:bg-[url('/public/bush.webp')] before:opacity-40;
+	}
+	.bg5 {
+		@apply before:bg-[url('/public/double-bubble-outline.webp')] before:opacity-70;
+	}
+	.bg6 {
+		@apply before:bg-[url('/public/paisley.webp')] before:opacity-40;
+	}
+	.bg7 {
+		@apply before:bg-[url('/public/triangles_pattern.webp')] before:opacity-60;
+	}
+	.bg1 {
+		@apply before:bg-[url('/public/white-waves.webp')] before:opacity-60;
+	}
+}

@@ -33,7 +33,7 @@
 	id="Note"
 	contenteditable
 	placeholder="Type or paste here ..."
-	class="min-h-screen p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
+	class="max-h-screen min-h-screen overflow-y-auto p-8 outline-none empty:text-xl empty:text-slate-300 empty:before:content-[attr(placeholder)]"
 	bind:innerHTML
 	on:input={handleUserInput}
 />
