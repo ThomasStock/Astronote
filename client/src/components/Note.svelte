@@ -12,7 +12,6 @@
 	});
 
 	const handleUserInput: FormEventHandler<HTMLElement> = (e) => {
-		console.log('handling user input');
 		const noKeyWasChosenYet = !$currentId;
 		const noteWithKeyDoesNotExistYet = !$noteStore;
 		if (noKeyWasChosenYet) {
@@ -23,8 +22,6 @@
 			typeNote(innerHTML);
 		}
 	};
-
-	$: console.log('notes', $notesStore);
 </script>
 
 <main

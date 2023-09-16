@@ -5,7 +5,7 @@ import { notesStore } from './notes';
 export const createNote = (html: string, newId?: string) => {
 	const id = newId ?? generateId();
 
-	console.log('creating, id', id, 'html', html);
+	console.log('createNote, id', id, 'html', html);
 	const versions = [{ html: '', updatedOn: Date.now() }];
 
 	notesStore.update((notes) => {

@@ -23,11 +23,18 @@ export const init = () => {
 			const dbNote = data.data as any as Note;
 
 			const localNote = get(notesStore)[id];
-			const localNoteIsMoreRecent = localNote && localNote.updatedOn > dbNote.updatedOn;
+			const localNoteIsMoreRecent = localNote && localNote.updatedOn >= dbNote.updatedOn;
+			console.log(
+				'localNoteIsMoreRecent',
+				localNoteIsMoreRecent,
+				localNote?.updatedOn,
+				dbNote.updatedOn
+			);
 			if (localNoteIsMoreRecent) {
 				return;
 			}
 
+			console.log('GET updating local note', dbNote);
 			notesStore.update((notes) => {
 				return { ...notes, [id]: dbNote };
 			});
@@ -44,7 +51,7 @@ export const init = () => {
 				}
 				console.log('dbNote.error while updating to ', newNote.html, error, status, statusText);
 			}
-			console.log('upserted to', newNote.html, data);
+			console.log('POST upserted to', newNote.html, data);
 		}
 	}, 100);
 
