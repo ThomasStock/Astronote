@@ -30,6 +30,7 @@
 	},
 	"dependencies": {
 		"@faker-js/faker": "^8.0.2",
+		"@material-design-icons/svg": "^0.14.12",
 		"@supabase/supabase-js": "^2.33.1",
 		"chokidar-cli": "^3.0.0",
 		"concurrently": "^8.2.1",

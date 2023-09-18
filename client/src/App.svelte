@@ -6,7 +6,7 @@
 
 <Note />
 <Menu />
-<nav aria-label="dev menu" class="fixed bottom-0 right-1/4 flex flex-col justify-center">
+<nav aria-label="dev menu" class="fixed bottom-0 right-12 flex flex-col justify-center">
 	<div class="flex flex-col items-end gap-2 p-4">
 		<DevTools />
 	</div>

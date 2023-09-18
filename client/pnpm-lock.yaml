@@ -8,6 +8,9 @@ dependencies:
   '@faker-js/faker':
     specifier: ^8.0.2
     version: 8.0.2
+  '@material-design-icons/svg':
+    specifier: ^0.14.12
+    version: 0.14.12
   '@supabase/supabase-js':
     specifier: ^2.33.1
     version: 2.33.1
@@ -309,6 +312,10 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@material-design-icons/svg@0.14.12:
+    resolution: {integrity: sha512-hVEMICFvG26SKDXatPmz+vY5BAqLPCDiyXnw+KN46FXOtY4PcpeAfzFZvwt6D9ywNnVJd4EvmLdlWgLmtOWxbA==}
+    dev: false
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}

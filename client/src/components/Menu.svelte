@@ -26,7 +26,10 @@
 </script>
 
 <div class="fixed -z-50 opacity-0">{$rand}</div>
-<nav aria-label="menu" class="flex flex-col justify-center bg-[#002109] bg-[url('/leather.png')]">
+<nav
+	aria-label="menu"
+	class="fixed bottom-0 right-0 top-0 flex flex-col justify-center bg-slate-100"
+>
 	<div
 		bind:this={menu}
 		style={`transform: translateY(${-deltaY}px);`}
@@ -46,7 +49,7 @@
 		></LinkButton>
 	</div>
 </nav>
-<nav aria-label="action-menu" class="fixed right-28 top-4 flex">
+<nav aria-label="action-menu" class="fixed right-0 top-4 flex">
 	<LinkButton
 		icon="undo"
 		hidden={!$canUndo}
